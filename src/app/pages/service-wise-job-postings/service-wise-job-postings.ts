@@ -11,11 +11,25 @@ import { JobReportItem } from '../../models/job-report.model';
   styleUrl: './service-wise-job-postings.scss',
 })
 export class ServiceWiseJobPostings implements OnInit {
-  fromDate: string = '2026-05-01';
-  toDate: string = '2026-05-17';
+  fromDate: string = '';
+  toDate: string = '';
   selectedServiceType: string = 'All';
 
-  serviceTypes = ['All', 'SME', 'Corporate', 'Basic'];
+  todayStr: string = '';
+  twoYearsLaterStr: string = '';
+  yesterdayStr: string = '';
+
+  serviceTypes = [
+    'All',
+    'SME Package',
+    'Standard Listing',
+    'Premium Listing',
+    'Premium Plus',
+    'PNPL',
+    'Hot Job',
+    'Internship Announcement',
+    'Blue Collar Job'
+  ];
 
   jobs: JobReportItem[] = [];
   totalCount: number = 0;
@@ -27,7 +41,32 @@ export class ServiceWiseJobPostings implements OnInit {
   constructor(private jobService: ServiceJobPostingsService) {}
 
   ngOnInit(): void {
+    this.initDates();
     this.fetchJobs();
+  }
+
+  initDates(): void {
+    const today = new Date();
+    this.todayStr = this.formatDate(today);
+
+    const twoYearsLater = new Date();
+    twoYearsLater.setFullYear(today.getFullYear() + 2);
+    this.twoYearsLaterStr = this.formatDate(twoYearsLater);
+
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    this.yesterdayStr = this.formatDate(yesterday);
+
+    // Default dates adhering to user rules
+    this.fromDate = this.todayStr;
+    this.toDate = this.yesterdayStr;
+  }
+
+  formatDate(date: Date): string {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
   }
 
   fetchJobs(): void {

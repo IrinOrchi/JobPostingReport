@@ -44,7 +44,7 @@
             From Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" id="fromDate" class="form-input" [(ngModel)]="fromDate" />
+            <input type="date" id="fromDate" class="form-input" [(ngModel)]="fromDate" [min]="todayStr" [max]="twoYearsLaterStr" />
           </div>
         </div>
 
@@ -56,7 +56,7 @@
             To Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" id="toDate" class="form-input" [(ngModel)]="toDate" />
+            <input type="date" id="toDate" class="form-input" [(ngModel)]="toDate" [max]="yesterdayStr" />
           </div>
         </div>
 
@@ -177,7 +177,7 @@
                 <span class="company-name">{{ job.companyName }}</span>
               </td>
               <td class="col-category">
-                <span class="category-tag">{{ job.categoryName }}</span>
+                <span class="category-text">{{ job.categoryName }}</span>
               </td>
               <td class="col-service">
                 <span class="service-badge" [class]="'service-' + job.serviceType.toLowerCase()">{{ job.serviceType }}</span>
