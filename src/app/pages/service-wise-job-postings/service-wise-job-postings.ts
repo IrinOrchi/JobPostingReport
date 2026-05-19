@@ -31,6 +31,8 @@ export class ServiceWiseJobPostings implements OnInit {
     'Blue Collar Job'
   ];
 
+  isSelectOpen: boolean = false;
+
   jobs: JobReportItem[] = [];
   totalCount: number = 0;
   currentPage: number = 1;
@@ -43,6 +45,11 @@ export class ServiceWiseJobPostings implements OnInit {
   ngOnInit(): void {
     this.initDates();
     this.fetchJobs();
+  }
+
+  selectServiceType(opt: string): void {
+    this.selectedServiceType = opt;
+    this.isSelectOpen = false;
   }
 
   initDates(): void {

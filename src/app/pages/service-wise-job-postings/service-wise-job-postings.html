@@ -68,12 +68,20 @@
             Service Type
           </label>
           <div class="input-wrapper select-wrapper">
-            <select id="serviceType" class="form-input form-select" [(ngModel)]="selectedServiceType">
-              <option *ngFor="let type of serviceTypes" [value]="type">{{ type }}</option>
-            </select>
-            <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="6 9 12 15 18 9"/>
-            </svg>
+            <div class="custom-select-trigger" [class.open]="isSelectOpen" (click)="isSelectOpen = !isSelectOpen">
+              <span>{{ selectedServiceType }}</span>
+              <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </div>
+            <div class="custom-dropdown-menu" *ngIf="isSelectOpen">
+              <div class="custom-dropdown-item" 
+                   *ngFor="let type of serviceTypes" 
+                   [class.active]="selectedServiceType === type"
+                   (click)="selectServiceType(type)">
+                {{ type }}
+              </div>
+            </div>
           </div>
         </div>
 
