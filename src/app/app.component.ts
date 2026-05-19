@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { PushNotificationService } from './services/push-notification.service';
+import { ServiceWiseJobPostings } from './pages/service-wise-job-postings/service-wise-job-postings';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
