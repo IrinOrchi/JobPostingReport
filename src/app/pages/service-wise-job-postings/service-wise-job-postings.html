@@ -38,25 +38,25 @@
       <div class="search-form">
         <div class="form-group">
           <label class="form-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
+              <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
             </svg>
             From Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" id="fromDate" class="form-input" [(ngModel)]="fromDate" [min]="todayStr" [max]="twoYearsLaterStr" />
+            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input" [(ngModel)]="fromDate" [min]="todayStr" [max]="twoYearsLaterStr" />
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
+              <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
             </svg>
             To Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" id="toDate" class="form-input" [(ngModel)]="toDate" [max]="yesterdayStr" />
+            <input type="date" #toDateInput (click)="toDateInput.showPicker()" id="toDate" class="form-input" [(ngModel)]="toDate" [max]="yesterdayStr" />
           </div>
         </div>
 
@@ -74,14 +74,17 @@
                 <polyline points="6 9 12 15 18 9"/>
               </svg>
             </div>
-            <div class="custom-dropdown-menu" *ngIf="isSelectOpen">
-              <div class="custom-dropdown-item" 
-                   *ngFor="let type of serviceTypes" 
-                   [class.active]="selectedServiceType === type"
-                   (click)="selectServiceType(type)">
-                {{ type }}
+            @if (isSelectOpen) {
+              <div class="custom-dropdown-menu">
+                @for (type of serviceTypes; track type) {
+                  <div class="custom-dropdown-item" 
+                       [class.active]="selectedServiceType === type"
+                       (click)="selectServiceType(type)">
+                    {{ type }}
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
         </div>
 
@@ -116,7 +119,9 @@
         <div class="page-size-control">
           <span class="control-label">Records per page</span>
           <select id="pageSizeSelect" class="page-size-select" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
-            <option *ngFor="let opt of pageSizeOptions" [value]="opt">{{ opt }}</option>
+            @for (opt of pageSizeOptions; track opt) {
+              <option [ngValue]="opt">{{ opt }}</option>
+            }
           </select>
         </div>
 
@@ -128,118 +133,134 @@
           Total <strong>{{ totalCount | number }}</strong> Jobs found
         </div>
 
-        <div class="pagination" *ngIf="totalPages > 1">
-          <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-          <ng-container *ngFor="let page of visiblePages">
-            <button *ngIf="page !== '...'" class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
-            <span *ngIf="page === '...'" class="page-ellipsis">…</span>
-          </ng-container>
-          <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-        </div>
+        @if (totalPages > 1) {
+          <div class="pagination">
+            <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            @for (page of visiblePages; track page) {
+              @if (page !== '...') {
+                <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
+              } @else {
+                <span class="page-ellipsis">…</span>
+              }
+            }
+            <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        }
       </div>
 
       <!-- Loading State -->
-      <div class="loading-overlay" *ngIf="isLoading">
-        <div class="spinner"></div>
-        <span>Loading records...</span>
-      </div>
+      @if (isLoading) {
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span>Loading records...</span>
+        </div>
+      }
 
       <!-- Table -->
-      <div class="table-container" *ngIf="!isLoading">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th class="col-sl">Sl.</th>
-              <th class="col-jp">JP_ID</th>
-              <th class="col-title">Job Title</th>
-              <th class="col-cp">CP_ID</th>
-              <th class="col-company">Company Name</th>
-              <th class="col-category">Category Name</th>
-              <th class="col-service">Service Type</th>
-              <th class="col-publish">Publish Date</th>
-              <th class="col-deadline">Deadline</th>
-              <th class="col-summary">Job Summary</th>
-              <th class="col-details">Job Details</th>
-              <th class="col-apply">Total Apply</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let job of jobs; let i = index" class="data-row" [class.row-alt]="i % 2 === 1">
-              <td class="col-sl">
-                <span class="sl-badge">{{ getSerialNumber(i) }}</span>
-              </td>
-              <td class="col-jp">
-                <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jpId }}</a>
-              </td>
-              <td class="col-title">
-                <span class="job-title-text">{{ job.jobTitle }}</span>
-              </td>
-              <td class="col-cp">
-                <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cpId }}</a>
-              </td>
-              <td class="col-company">
-                <span class="company-name">{{ job.companyName }}</span>
-              </td>
-              <td class="col-category">
-                <span class="category-text">{{ job.categoryName }}</span>
-              </td>
-              <td class="col-service">
-                <span class="service-badge" [class]="'service-' + job.serviceType.toLowerCase()">{{ job.serviceType }}</span>
-              </td>
-              <td class="col-publish">
-                <span class="date-text">{{ job.publishDate }}</span>
-              </td>
-              <td class="col-deadline">
-                <span class="date-text">{{ job.deadline }}</span>
-              </td>
-              <td class="col-summary">
-                <span class="stat-value">{{ job.jobSummary }}</span>
-              </td>
-              <td class="col-details">
-                <span class="stat-value">{{ job.jobDetails }}</span>
-              </td>
-              <td class="col-apply">
-                <span class="apply-count">{{ job.totalApply }}</span>
-              </td>
-            </tr>
-
-            <!-- Empty State -->
-            <tr *ngIf="jobs.length === 0">
-              <td colspan="12" class="empty-state">
-                <div class="empty-content">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                  </svg>
-                  <p>No records found for the selected criteria.</p>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Bottom Pagination -->
-      <div class="table-controls table-controls--bottom" *ngIf="!isLoading && totalPages > 1">
-        <div class="pagination-info">
-          Showing {{ (currentPage - 1) * pageSize + 1 }} – {{ getEndRecord() }} of {{ totalCount | number }} records
+      @if (!isLoading) {
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-sl">Sl.</th>
+                <th class="col-jp">JP_ID</th>
+                <th class="col-title">Job Title</th>
+                <th class="col-cp">CP_ID</th>
+                <th class="col-company">Company Name</th>
+                <th class="col-category">Category Name</th>
+                <th class="col-service">Service Type</th>
+                <th class="col-publish">Publish Date</th>
+                <th class="col-deadline">Deadline</th>
+                <th class="col-summary">Job Summary</th>
+                <th class="col-details">Job Details</th>
+                <th class="col-apply">Total Apply</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (job of jobs; track job.jpId; let i = $index) {
+                <tr class="data-row" [class.row-alt]="i % 2 === 1">
+                  <td class="col-sl">
+                    <span class="sl-badge">{{ getSerialNumber(i) }}</span>
+                  </td>
+                  <td class="col-jp">
+                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jpId }}</a>
+                  </td>
+                  <td class="col-title">
+                    <span class="job-title-text">{{ job.jobTitle }}</span>
+                  </td>
+                  <td class="col-cp">
+                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cpId }}</a>
+                  </td>
+                  <td class="col-company">
+                    <span class="company-name">{{ job.companyName }}</span>
+                  </td>
+                  <td class="col-category">
+                    <span class="category-text">{{ job.categoryName }}</span>
+                  </td>
+                  <td class="col-service">
+                    <span class="service-text">{{ job.serviceType }}</span>
+                  </td>
+                  <td class="col-publish">
+                    <span class="date-text">{{ job.publishDate }}</span>
+                  </td>
+                  <td class="col-deadline">
+                    <span class="date-text">{{ job.deadline }}</span>
+                  </td>
+                  <td class="col-summary">
+                    <span class="stat-value">{{ job.jobSummary }}</span>
+                  </td>
+                  <td class="col-details">
+                    <span class="stat-value">{{ job.jobDetails }}</span>
+                  </td>
+                  <td class="col-apply">
+                    <span class="apply-count">{{ job.totalApply }}</span>
+                  </td>
+                </tr>
+              } @empty {
+                <!-- Empty State -->
+                <tr>
+                  <td colspan="12" class="empty-state">
+                    <div class="empty-content">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                      </svg>
+                      <p>No records found for the selected criteria.</p>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
         </div>
-        <div class="pagination">
-          <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-          </button>
-          <ng-container *ngFor="let page of visiblePages">
-            <button *ngIf="page !== '...'" class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
-            <span *ngIf="page === '...'" class="page-ellipsis">…</span>
-          </ng-container>
-          <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-          </button>
-        </div>
-      </div>
+
+        <!-- Bottom Pagination -->
+        @if (totalPages > 1) {
+          <div class="table-controls table-controls--bottom">
+            <div class="pagination-info">
+              Showing {{ (currentPage - 1) * pageSize + 1 }} – {{ getEndRecord() }} of {{ totalCount | number }} records
+            </div>
+            <div class="pagination">
+              <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              @for (page of visiblePages; track page) {
+                @if (page !== '...') {
+                  <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
+                } @else {
+                  <span class="page-ellipsis">…</span>
+                }
+              }
+              <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+        }
+      }
 
     </div>
   </div>
