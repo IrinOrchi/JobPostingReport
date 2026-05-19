@@ -1,11 +1,112 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ServiceJobPostingsService } from '../../services/serviceJobPostings.service';
+import { JobReportItem } from '../../models/job-report.model';
 
 @Component({
   selector: 'app-service-wise-job-postings',
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './service-wise-job-postings.html',
   styleUrl: './service-wise-job-postings.scss',
 })
-export class ServiceWiseJobPostings {
+export class ServiceWiseJobPostings implements OnInit {
+  fromDate: string = '2026-05-01';
+  toDate: string = '2026-05-17';
+  selectedServiceType: string = 'All';
 
+  serviceTypes = ['All', 'SME', 'Corporate', 'Basic'];
+
+  jobs: JobReportItem[] = [];
+  totalCount: number = 0;
+  currentPage: number = 1;
+  pageSize: number = 20;
+  pageSizeOptions = [10, 20, 50, 100];
+  isLoading: boolean = false;
+
+  constructor(private jobService: ServiceJobPostingsService) {}
+
+  ngOnInit(): void {
+    this.fetchJobs();
+  }
+
+  fetchJobs(): void {
+    this.isLoading = true;
+    this.jobService
+      .getJobPostings(
+        this.fromDate,
+        this.toDate,
+        this.selectedServiceType,
+        this.currentPage,
+        this.pageSize
+      )
+      .subscribe({
+        next: (res) => {
+          this.jobs = res.data;
+          this.totalCount = res.totalCount;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+        },
+      });
+  }
+
+  onSubmit(): void {
+    this.currentPage = 1;
+    this.fetchJobs();
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage = 1;
+    this.fetchJobs();
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalCount / this.pageSize);
+  }
+
+  get visiblePages(): (number | string)[] {
+    const total = this.totalPages;
+    const current = this.currentPage;
+    const pages: (number | string)[] = [];
+
+    if (total <= 8) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      pages.push(1, 2, 3, 4, 5, 6, 7, 8);
+      if (total > 9) pages.push('...');
+      pages.push(total);
+    }
+    return pages;
+  }
+
+  goToPage(page: number | string): void {
+    if (typeof page === 'number' && page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.fetchJobs();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.fetchJobs();
+    }
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.fetchJobs();
+    }
+  }
+
+  getSerialNumber(index: number): number {
+    return (this.currentPage - 1) * this.pageSize + index + 1;
+  }
+
+  getEndRecord(): number {
+    return Math.min(this.currentPage * this.pageSize, this.totalCount);
+  }
 }

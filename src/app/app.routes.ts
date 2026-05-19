@@ -3,11 +3,11 @@ import { ServiceWiseJobPostings } from './pages/service-wise-job-postings/servic
 export const routes: Routes = [
      {
     path: '',
-    redirectTo: 'ServiceJobPostings',
+    redirectTo: 'ServiceWise',
     pathMatch: 'full'
   },
   {
-    path: 'ServiceJobPostings',
+    path: 'ServiceWise',
     component: ServiceWiseJobPostings
   }
   
