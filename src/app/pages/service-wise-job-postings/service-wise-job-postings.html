@@ -183,6 +183,46 @@
           }
         </div>
 
+        <!-- Search by CPID / JPID -->
+        <div class="id-search-bar">
+          <div class="id-search-group">
+            <div class="id-search-field">
+              <label class="id-search-label">CP_ID</label>
+              <input type="text" class="id-search-input" placeholder="Search CP_ID..."
+                     [(ngModel)]="searchCpid"
+                     (keyup.enter)="onSearchById()" />
+            </div>
+            <div class="id-search-field">
+              <label class="id-search-label">JP_ID</label>
+              <input type="text" class="id-search-input" placeholder="Search JP_ID..."
+                     [(ngModel)]="searchJpid"
+                     (keyup.enter)="onSearchById()" />
+            </div>
+            <button class="id-search-btn" (click)="onSearchById()" [disabled]="isLoading || (!searchCpid.trim() && !searchJpid.trim())">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              Search
+            </button>
+            @if (isSearchMode) {
+              <button class="id-clear-btn" (click)="clearSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                Clear
+              </button>
+            }
+          </div>
+          @if (isSearchMode) {
+            <div class="id-search-status">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Showing <strong>{{ filteredJobs.length | number }}</strong> filtered result{{ filteredJobs.length !== 1 ? 's' : '' }} from all data
+            </div>
+          }
+        </div>
+
         <!-- Loading State -->
         @if (isLoading) {
           <div class="loading-overlay">

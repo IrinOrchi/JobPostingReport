@@ -44,6 +44,15 @@ export class ServiceWiseJobPostings implements OnInit {
   isLoading: boolean = false;
   hasSearched: boolean = false;
 
+  // Search by CPID / JPID
+  searchCpid: string = '';
+  searchJpid: string = '';
+  isSearchMode: boolean = false;
+  isLoadingAllData: boolean = false;
+  allJobs: JobReportItem[] = [];
+  filteredJobs: JobReportItem[] = [];
+  allDataFetched: boolean = false;
+
   constructor(private jobService: ServiceJobPostingsService) {}
 
   ngOnInit(): void {
@@ -144,6 +153,101 @@ export class ServiceWiseJobPostings implements OnInit {
       });
   }
 
+  /** Fetch ALL records so we can search locally across the full dataset */
+  fetchAllJobs(): void {
+    if (this.allDataFetched && this.allJobs.length > 0) {
+      this.applyLocalFilter();
+      return;
+    }
+
+    this.isLoadingAllData = true;
+    this.isLoading = true;
+    const formattedFrom = this.formatDateToApi(this.fromDate);
+    const formattedTo = this.formatDateToApi(this.toDate);
+
+    // Fetch all records at once by using totalCount (or a large number) as pageSize
+    const fetchSize = this.totalCount > 0 ? this.totalCount : 100000;
+
+    this.jobService
+      .getJobPostings(
+        formattedFrom,
+        formattedTo,
+        this.selectedServiceType.serviceType,
+        this.selectedServiceType.jobType,
+        1,
+        fetchSize
+      )
+      .subscribe({
+        next: (res) => {
+          this.allJobs = res;
+          this.allDataFetched = true;
+          this.isLoadingAllData = false;
+          this.isLoading = false;
+          this.applyLocalFilter();
+        },
+        error: () => {
+          this.isLoadingAllData = false;
+          this.isLoading = false;
+          this.allJobs = [];
+        },
+      });
+  }
+
+  /** Apply CPID / JPID filter on cached allJobs */
+  applyLocalFilter(): void {
+    let filtered = [...this.allJobs];
+
+    const cpidTerm = this.searchCpid.trim();
+    const jpidTerm = this.searchJpid.trim();
+
+    if (cpidTerm) {
+      filtered = filtered.filter(job =>
+        String(job.cP_ID).includes(cpidTerm)
+      );
+    }
+
+    if (jpidTerm) {
+      filtered = filtered.filter(job =>
+        String(job.jP_ID).includes(jpidTerm)
+      );
+    }
+
+    this.filteredJobs = filtered;
+    this.totalCount = filtered.length;
+    this.currentPage = 1;
+    this.jobs = this.getPagedFilteredJobs();
+  }
+
+  /** Get the current page slice from filteredJobs */
+  getPagedFilteredJobs(): JobReportItem[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    return this.filteredJobs.slice(start, end);
+  }
+
+  /** Triggered when user clicks the search button */
+  onSearchById(): void {
+    const cpidTerm = this.searchCpid.trim();
+    const jpidTerm = this.searchJpid.trim();
+
+    if (!cpidTerm && !jpidTerm) {
+      return;
+    }
+
+    this.isSearchMode = true;
+    this.fetchAllJobs();
+  }
+
+  /** Clear search and revert to normal paginated view */
+  clearSearch(): void {
+    this.searchCpid = '';
+    this.searchJpid = '';
+    this.isSearchMode = false;
+    this.filteredJobs = [];
+    this.currentPage = 1;
+    this.fetchJobs();
+  }
+
 
   onSubmit(): void {
     if (this.selectedServiceType.label === 'All') {
@@ -154,12 +258,23 @@ export class ServiceWiseJobPostings implements OnInit {
     }
     this.hasSearched = true;
     this.currentPage = 1;
+    // Reset search state on new submit
+    this.isSearchMode = false;
+    this.searchCpid = '';
+    this.searchJpid = '';
+    this.allJobs = [];
+    this.allDataFetched = false;
+    this.filteredJobs = [];
     this.fetchJobs();
   }
 
   onPageSizeChange(): void {
     this.currentPage = 1;
-    this.fetchJobs();
+    if (this.isSearchMode) {
+      this.jobs = this.getPagedFilteredJobs();
+    } else {
+      this.fetchJobs();
+    }
   }
 
   get totalPages(): number {
@@ -184,21 +299,33 @@ export class ServiceWiseJobPostings implements OnInit {
   goToPage(page: number | string): void {
     if (typeof page === 'number' && page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
-      this.fetchJobs();
+      if (this.isSearchMode) {
+        this.jobs = this.getPagedFilteredJobs();
+      } else {
+        this.fetchJobs();
+      }
     }
   }
 
   prevPage(): void {
     if (this.currentPage > 1) {
       this.currentPage--;
-      this.fetchJobs();
+      if (this.isSearchMode) {
+        this.jobs = this.getPagedFilteredJobs();
+      } else {
+        this.fetchJobs();
+      }
     }
   }
 
   nextPage(): void {
     if (this.currentPage < this.totalPages) {
       this.currentPage++;
-      this.fetchJobs();
+      if (this.isSearchMode) {
+        this.jobs = this.getPagedFilteredJobs();
+      } else {
+        this.fetchJobs();
+      }
     }
   }
 
