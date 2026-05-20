@@ -41,17 +41,23 @@ export class ServiceWiseJobPostings implements OnInit {
   pageSize: number = 20;
   pageSizeOptions = [20, 50, 100];
   isLoading: boolean = false;
+  hasSearched: boolean = false;
 
   constructor(private jobService: ServiceJobPostingsService) {}
 
   ngOnInit(): void {
     this.initDates();
-    this.fetchJobs();
   }
 
   selectServiceType(opt: ServiceTypeDropdownOption): void {
     this.selectedServiceType = opt;
     this.isSelectOpen = false;
+    // Reset table view when switching back to All
+    if (opt.label === 'All') {
+      this.hasSearched = false;
+      this.jobs = [];
+      this.totalCount = 0;
+    }
   }
 
   initDates(): void {
@@ -139,6 +145,13 @@ export class ServiceWiseJobPostings implements OnInit {
 
 
   onSubmit(): void {
+    if (this.selectedServiceType.label === 'All') {
+      this.hasSearched = false;
+      this.jobs = [];
+      this.totalCount = 0;
+      return;
+    }
+    this.hasSearched = true;
     this.currentPage = 1;
     this.fetchJobs();
   }

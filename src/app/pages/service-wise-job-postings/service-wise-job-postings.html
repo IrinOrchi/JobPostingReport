@@ -114,138 +114,57 @@
     </div>
 
     <div class="panel-body">
-      <!-- Table Controls Top -->
-      <div class="table-controls">
-        <div class="page-size-control">
-          <span class="control-label">Records per page</span>
-          <select id="pageSizeSelect" class="page-size-select" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
-            @for (opt of pageSizeOptions; track opt) {
-              <option [ngValue]="opt">{{ opt }}</option>
-            }
-          </select>
-        </div>
 
-        <div class="total-badge">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-          Total <strong>{{ totalCount | number }}</strong> Jobs found
-        </div>
-
-        @if (totalPages > 1) {
-          <div class="pagination">
-            <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            </button>
-            @for (page of visiblePages; track page) {
-              @if (page !== '...') {
-                <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
-              } @else {
-                <span class="page-ellipsis">…</span>
+      <!-- Placeholder: shown when All is selected or no search done yet -->
+      @if (!hasSearched) {
+        <div class="no-search-placeholder">
+          <div class="placeholder-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/>
+              <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+              <line x1="12" y1="12" x2="12" y2="16"/>
+              <line x1="10" y1="14" x2="14" y2="14"/>
+            </svg>
+          </div>
+          <h3 class="placeholder-title">Select a Service Type to View Data</h3>
+          <p class="placeholder-desc">
+            Please select a <strong>From Date</strong> and <strong>To Date</strong>, choose a specific service type
+            (e.g. <strong>SME</strong>, <strong>Hot Job</strong>, <strong>Premium Listing</strong>) from the search panel above,
+            then click <strong>Submit</strong> to load the report.
+          </p>
+          <!-- <div class="placeholder-chips">
+            @for (type of serviceTypes; track type.label) {
+              @if (type.label !== 'All') {
+                <span class="placeholder-chip" (click)="selectServiceType(type)">{{ type.label }}</span>
               }
             }
-            <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
-        }
-      </div>
-
-      <!-- Loading State -->
-      @if (isLoading) {
-        <div class="loading-overlay">
-          <div class="spinner"></div>
-          <span>Loading records...</span>
+          </div> -->
         </div>
       }
 
-      <!-- Table -->
-      @if (!isLoading) {
-        <div class="table-container">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th class="col-sl">Sl.</th>
-                <th class="col-jp">JP_ID</th>
-                <th class="col-title">Job Title</th>
-                <th class="col-cp">CP_ID</th>
-                <th class="col-company">Company Name</th>
-                <th class="col-category">Category Name</th>
-                <th class="col-service">Service Type</th>
-                <th class="col-publish">Publish Date</th>
-                <th class="col-deadline">Deadline</th>
-                <th class="col-summary">Job Summary</th>
-                <th class="col-details">Job Details</th>
-                <th class="col-apply">Total Apply</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (job of jobs; track job.jP_ID; let i = $index) {
-                <tr class="data-row" [class.row-alt]="i % 2 === 1">
-                  <td class="col-sl">
-                    <span class="sl-badge">{{ getSerialNumber(i) }}</span>
-                  </td>
-                  <td class="col-jp">
-                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
-                  </td>
-                  <td class="col-title">
-                    <span class="job-title-text">{{ job.jobTitle }}</span>
-                  </td>
-                  <td class="col-cp">
-                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>
-                  </td>
-                  <td class="col-company">
-                    <span class="company-name">{{ job.companyName }}</span>
-                  </td>
-                  <td class="col-category">
-                    <span class="category-text">{{ job.caT_NAME || '-' }}</span>
-                  </td>
-                  <td class="col-service">
-                    <span class="service-text">{{ getServiceTypeName(job) }}</span>
-                  </td>
-                  <td class="col-publish">
-                    <span class="date-text">{{ job.publishDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
-                  </td>
-                  <td class="col-deadline">
-                    <span class="date-text">{{ job.deadline || '-' }}</span>
-                  </td>
-                  <td class="col-summary">
-                    <span class="stat-value">{{ job.summaryView || 0 }}</span>
-                  </td>
-                  <td class="col-details">
-                    <span class="stat-value">{{ job.detailView || 0 }}</span>
-                  </td>
-                  <td class="col-apply">
-                    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                      <span class="apply-count">{{ job.totalApply }}</span>
-                      <span style="font-size: 0.65rem; color: var(--text-muted);">Views: {{ job.applyView || 0 }}</span>
-                    </div>
-                  </td>
-                </tr>
-              } @empty {
-                <!-- Empty State -->
-                <tr>
-                  <td colspan="12" class="empty-state">
-                    <div class="empty-content">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                      </svg>
-                      <p>No records found for the selected criteria.</p>
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+      <!-- Table section: shown only after a valid search -->
+      @if (hasSearched) {
 
-        <!-- Bottom Pagination -->
-        @if (totalPages > 1) {
-          <div class="table-controls table-controls--bottom">
-            <div class="pagination-info">
-              Showing {{ (currentPage - 1) * pageSize + 1 }} – {{ getEndRecord() }} of {{ totalCount | number }} records
-            </div>
+        <!-- Table Controls Top -->
+        <div class="table-controls">
+          <div class="page-size-control">
+            <span class="control-label">Records per page</span>
+            <select id="pageSizeSelect" class="page-size-select" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
+              @for (opt of pageSizeOptions; track opt) {
+                <option [ngValue]="opt">{{ opt }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="total-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+            Total <strong>{{ totalCount | number }}</strong> Jobs found
+          </div>
+
+          @if (totalPages > 1) {
             <div class="pagination">
               <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -261,8 +180,122 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
             </div>
+          }
+        </div>
+
+        <!-- Loading State -->
+        @if (isLoading) {
+          <div class="loading-overlay">
+            <div class="spinner"></div>
+            <span>Loading records...</span>
           </div>
         }
+
+        <!-- Table -->
+        @if (!isLoading) {
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="col-sl">Sl.</th>
+                  <th class="col-jp">JP_ID</th>
+                  <th class="col-title">Job Title</th>
+                  <th class="col-cp">CP_ID</th>
+                  <th class="col-company">Company Name</th>
+                  <th class="col-category">Category Name</th>
+                  <th class="col-service">Service Type</th>
+                  <th class="col-publish">Publish Date</th>
+                  <th class="col-deadline">Deadline</th>
+                  <th class="col-summary">Job Summary</th>
+                  <th class="col-details">Job Details</th>
+                  <th class="col-apply">Total Apply</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (job of jobs; track job.jP_ID; let i = $index) {
+                  <tr class="data-row" [class.row-alt]="i % 2 === 1">
+                    <td class="col-sl">
+                      <span class="sl-badge">{{ getSerialNumber(i) }}</span>
+                    </td>
+                    <td class="col-jp">
+                      <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
+                    </td>
+                    <td class="col-title">
+                      <span class="job-title-text">{{ job.jobTitle }}</span>
+                    </td>
+                    <td class="col-cp">
+                      <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>
+                    </td>
+                    <td class="col-company">
+                      <span class="company-name">{{ job.companyName }}</span>
+                    </td>
+                    <td class="col-category">
+                      <span class="category-text">{{ job.caT_NAME || '-' }}</span>
+                    </td>
+                    <td class="col-service">
+                      <span class="service-text">{{ getServiceTypeName(job) }}</span>
+                    </td>
+                    <td class="col-publish">
+                      <span class="date-text">{{ job.publishDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                    </td>
+                    <td class="col-deadline">
+                      <span class="date-text">{{ job.deadline || '-' }}</span>
+                    </td>
+                    <td class="col-summary">
+                      <span class="stat-value">{{ job.summaryView || 0 }}</span>
+                    </td>
+                    <td class="col-details">
+                      <span class="stat-value">{{ job.detailView || 0 }}</span>
+                    </td>
+                    <td class="col-apply">
+                      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                        <span class="apply-count">{{ job.totalApply }}</span>
+                        <span style="font-size: 0.65rem; color: var(--text-muted);">Views: {{ job.applyView || 0 }}</span>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <!-- Empty State -->
+                  <tr>
+                    <td colspan="12" class="empty-state">
+                      <div class="empty-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <p>No records found for the selected criteria.</p>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Bottom Pagination -->
+          @if (totalPages > 1) {
+            <div class="table-controls table-controls--bottom">
+              <div class="pagination-info">
+                Showing {{ (currentPage - 1) * pageSize + 1 }} – {{ getEndRecord() }} of {{ totalCount | number }} records
+              </div>
+              <div class="pagination">
+                <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                @for (page of visiblePages; track page) {
+                  @if (page !== '...') {
+                    <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
+                  } @else {
+                    <span class="page-ellipsis">…</span>
+                  }
+                }
+                <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+          }
+        }
+
       }
 
     </div>
