@@ -18,11 +18,11 @@ export class ServiceWiseJobPostings implements OnInit {
 
   serviceTypes: ServiceTypeDropdownOption[] = [
     { label: 'All', serviceType: null, jobType: null },
-    { label: 'PNPL', serviceType: 0, jobType: 'J' },
-    { label: 'Hot Job', serviceType: 1, jobType: 'H' },
+    { label: 'SME', serviceType: 10, jobType: 'J' },
     { label: 'Premium Listing', serviceType: 1, jobType: 'J' },
     { label: 'Premium Plus', serviceType: 2, jobType: 'J' },
-    { label: 'SME', serviceType: 10, jobType: 'J' },
+    { label: 'Hot Job', serviceType: 1, jobType: 'H' },
+    { label: 'PNPL', serviceType: 0, jobType: 'J' },
     { label: 'Free Listing', serviceType: 12, jobType: 'J' },
     { label: 'Internship Announcement', serviceType: 13, jobType: 'J' },
     { label: 'Blue Collar', serviceType: 14, jobType: 'J' }
@@ -31,7 +31,6 @@ export class ServiceWiseJobPostings implements OnInit {
   selectedServiceType: ServiceTypeDropdownOption = this.serviceTypes[0];
 
   todayStr: string = '';
-  twoYearsLaterStr: string = '';
   yesterdayStr: string = '';
 
   isSelectOpen: boolean = false;
@@ -59,16 +58,13 @@ export class ServiceWiseJobPostings implements OnInit {
     const today = new Date();
     this.todayStr = this.formatDate(today);
 
-    const twoYearsLater = new Date();
-    twoYearsLater.setFullYear(today.getFullYear() + 2);
-    this.twoYearsLaterStr = this.formatDate(twoYearsLater);
+
 
     const yesterday = new Date();
     yesterday.setDate(today.getDate() - 1);
     this.yesterdayStr = this.formatDate(yesterday);
 
-    // Default dates adhering to user rules
-    this.fromDate = this.todayStr;
+    this.fromDate = this.yesterdayStr;
     this.toDate = this.yesterdayStr;
   }
 

@@ -44,7 +44,7 @@
             From Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input" [(ngModel)]="fromDate" [max]="twoYearsLaterStr" />
+            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input" [(ngModel)]="fromDate" [max]="yesterdayStr" />
           </div>
         </div>
 
