@@ -239,7 +239,7 @@
                       <span class="date-text">{{ job.publishDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
                     </td>
                     <td class="col-deadline">
-                      <span class="date-text">{{ job.deadline || '-' }}</span>
+                      <span class="date-text">{{ job.deadLine | date:'yyyy-MM-dd HH:mm:ss' }}</span>
                     </td>
                     <td class="col-summary">
                       <span class="stat-value">{{ job.summaryView || 0 }}</span>

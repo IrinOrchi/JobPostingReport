@@ -19,6 +19,7 @@ export class ServiceWiseJobPostings implements OnInit {
   serviceTypes: ServiceTypeDropdownOption[] = [
     { label: 'All', serviceType: null, jobType: null },
     { label: 'SME', serviceType: 10, jobType: 'J' },
+    { label: 'Standard Listing', serviceType: 0, jobType: 'J' },
     { label: 'Premium Listing', serviceType: 1, jobType: 'J' },
     { label: 'Premium Plus', serviceType: 2, jobType: 'J' },
     { label: 'Hot Job', serviceType: 1, jobType: 'H' },
@@ -52,7 +53,6 @@ export class ServiceWiseJobPostings implements OnInit {
   selectServiceType(opt: ServiceTypeDropdownOption): void {
     this.selectedServiceType = opt;
     this.isSelectOpen = false;
-    // Reset table view when switching back to All
     if (opt.label === 'All') {
       this.hasSearched = false;
       this.jobs = [];
@@ -98,6 +98,7 @@ export class ServiceWiseJobPostings implements OnInit {
       const sType = Number(job.serviceType);
       const jType = String(job.jobType);
       if (sType === 0 && jType === 'J') return 'PNPL';
+      if (sType === 0 && jType === 'J') return 'Standard Listing';
       if (sType === 1 && jType === 'H') return 'Hot Job';
       if (sType === 1 && jType === 'J') return 'Premium Listing';
       if (sType === 2 && jType === 'J') return 'Premium Plus';

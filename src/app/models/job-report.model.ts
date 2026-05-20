@@ -19,7 +19,7 @@ export interface JobReportItem {
   categoryName?: string;
   serviceType?: string | number;
   jobType?: string;
-  deadline?: string;
+  deadLine?: string;
   jobSummary?: number;
   caT_NAME?: string;
   jobDetails?: number;
