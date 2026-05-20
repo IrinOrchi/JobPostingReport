@@ -44,7 +44,7 @@
             From Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input" [(ngModel)]="fromDate" [min]="todayStr" [max]="twoYearsLaterStr" />
+            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input" [(ngModel)]="fromDate" [max]="twoYearsLaterStr" />
           </div>
         </div>
 
@@ -69,18 +69,18 @@
           </label>
           <div class="input-wrapper select-wrapper">
             <div class="custom-select-trigger" [class.open]="isSelectOpen" (click)="isSelectOpen = !isSelectOpen">
-              <span>{{ selectedServiceType }}</span>
+              <span>{{ selectedServiceType.label }}</span>
               <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"/>
               </svg>
             </div>
             @if (isSelectOpen) {
               <div class="custom-dropdown-menu">
-                @for (type of serviceTypes; track type) {
+                @for (type of serviceTypes; track type.label) {
                   <div class="custom-dropdown-item" 
-                       [class.active]="selectedServiceType === type"
+                       [class.active]="selectedServiceType.label === type.label"
                        (click)="selectServiceType(type)">
-                    {{ type }}
+                    {{ type.label }}
                   </div>
                 }
               </div>
@@ -181,43 +181,46 @@
               </tr>
             </thead>
             <tbody>
-              @for (job of jobs; track job.jpId; let i = $index) {
+              @for (job of jobs; track job.jP_ID; let i = $index) {
                 <tr class="data-row" [class.row-alt]="i % 2 === 1">
                   <td class="col-sl">
                     <span class="sl-badge">{{ getSerialNumber(i) }}</span>
                   </td>
                   <td class="col-jp">
-                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jpId }}</a>
+                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
                   </td>
                   <td class="col-title">
                     <span class="job-title-text">{{ job.jobTitle }}</span>
                   </td>
                   <td class="col-cp">
-                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cpId }}</a>
+                    <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>
                   </td>
                   <td class="col-company">
                     <span class="company-name">{{ job.companyName }}</span>
                   </td>
                   <td class="col-category">
-                    <span class="category-text">{{ job.categoryName }}</span>
+                    <span class="category-text">{{ job.caT_NAME || '-' }}</span>
                   </td>
                   <td class="col-service">
-                    <span class="service-text">{{ job.serviceType }}</span>
+                    <span class="service-text">{{ getServiceTypeName(job) }}</span>
                   </td>
                   <td class="col-publish">
-                    <span class="date-text">{{ job.publishDate }}</span>
+                    <span class="date-text">{{ job.publishDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
                   </td>
                   <td class="col-deadline">
-                    <span class="date-text">{{ job.deadline }}</span>
+                    <span class="date-text">{{ job.deadline || '-' }}</span>
                   </td>
                   <td class="col-summary">
-                    <span class="stat-value">{{ job.jobSummary }}</span>
+                    <span class="stat-value">{{ job.summaryView || 0 }}</span>
                   </td>
                   <td class="col-details">
-                    <span class="stat-value">{{ job.jobDetails }}</span>
+                    <span class="stat-value">{{ job.detailView || 0 }}</span>
                   </td>
                   <td class="col-apply">
-                    <span class="apply-count">{{ job.totalApply }}</span>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                      <span class="apply-count">{{ job.totalApply }}</span>
+                      <span style="font-size: 0.65rem; color: var(--text-muted);">Views: {{ job.applyView || 0 }}</span>
+                    </div>
                   </td>
                 </tr>
               } @empty {

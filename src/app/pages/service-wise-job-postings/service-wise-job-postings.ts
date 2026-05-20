@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ServiceJobPostingsService } from '../../services/serviceJobPostings.service';
-import { JobReportItem } from '../../models/job-report.model';
+import { JobReportItem, ServiceTypeDropdownOption } from '../../models/job-report.model';
+
+
 
 @Component({
   selector: 'app-service-wise-job-postings',
@@ -13,23 +15,24 @@ import { JobReportItem } from '../../models/job-report.model';
 export class ServiceWiseJobPostings implements OnInit {
   fromDate: string = '';
   toDate: string = '';
-  selectedServiceType: string = 'All';
+
+  serviceTypes: ServiceTypeDropdownOption[] = [
+    { label: 'All', serviceType: null, jobType: null },
+    { label: 'PNPL', serviceType: 0, jobType: 'J' },
+    { label: 'Hot Job', serviceType: 1, jobType: 'H' },
+    { label: 'Premium Listing', serviceType: 1, jobType: 'J' },
+    { label: 'Premium Plus', serviceType: 2, jobType: 'J' },
+    { label: 'SME', serviceType: 10, jobType: 'J' },
+    { label: 'Free Listing', serviceType: 12, jobType: 'J' },
+    { label: 'Internship Announcement', serviceType: 13, jobType: 'J' },
+    { label: 'Blue Collar', serviceType: 14, jobType: 'J' }
+  ];
+
+  selectedServiceType: ServiceTypeDropdownOption = this.serviceTypes[0];
 
   todayStr: string = '';
   twoYearsLaterStr: string = '';
   yesterdayStr: string = '';
-
-  serviceTypes = [
-    'All',
-    'SME Package',
-    'Standard Listing',
-    'Premium Listing',
-    'Premium Plus',
-    'PNPL',
-    'Hot Job',
-    'Internship Announcement',
-    'Blue Collar Job'
-  ];
 
   isSelectOpen: boolean = false;
 
@@ -47,7 +50,7 @@ export class ServiceWiseJobPostings implements OnInit {
     this.fetchJobs();
   }
 
-  selectServiceType(opt: string): void {
+  selectServiceType(opt: ServiceTypeDropdownOption): void {
     this.selectedServiceType = opt;
     this.isSelectOpen = false;
   }
@@ -76,27 +79,68 @@ export class ServiceWiseJobPostings implements OnInit {
     return `${yyyy}-${mm}-${dd}`;
   }
 
+  formatDateToApi(dateStr: string): string {
+    if (!dateStr) return '';
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      const year = parts[0];
+      const month = parseInt(parts[1], 10).toString();
+      const day = parseInt(parts[2], 10).toString();
+      return `${month}/${day}/${year}`;
+    }
+    return dateStr;
+  }
+
+  getServiceTypeName(job: JobReportItem): string {
+    if (job.serviceType !== undefined && job.jobType !== undefined) {
+      const sType = Number(job.serviceType);
+      const jType = String(job.jobType);
+      if (sType === 0 && jType === 'J') return 'PNPL';
+      if (sType === 1 && jType === 'H') return 'Hot Job';
+      if (sType === 1 && jType === 'J') return 'Premium Listing';
+      if (sType === 2 && jType === 'J') return 'Premium Plus';
+      if (sType === 10 && jType === 'J') return 'SME';
+      if (sType === 12 && jType === 'J') return 'Free Listing';
+      if (sType === 13 && jType === 'J') return 'Internship Announcement';
+      if (sType === 14 && jType === 'J') return 'Blue Collar';
+    }
+    if (typeof job.serviceType === 'string' && job.serviceType.length > 0) {
+      return job.serviceType;
+    }
+    if (this.selectedServiceType.label !== 'All') {
+      return this.selectedServiceType.label;
+    }
+    return '-';
+  }
+
   fetchJobs(): void {
     this.isLoading = true;
+    const formattedFrom = this.formatDateToApi(this.fromDate);
+    const formattedTo = this.formatDateToApi(this.toDate);
+
     this.jobService
       .getJobPostings(
-        this.fromDate,
-        this.toDate,
-        this.selectedServiceType,
+        formattedFrom,
+        formattedTo,
+        this.selectedServiceType.serviceType,
+        this.selectedServiceType.jobType,
         this.currentPage,
         this.pageSize
       )
       .subscribe({
         next: (res) => {
-          this.jobs = res.data;
-          this.totalCount = res.totalCount;
+          this.jobs = res;
+          this.totalCount = res.length > 0 ? res[0].totalRow : 0;
           this.isLoading = false;
         },
         error: () => {
           this.isLoading = false;
+          this.jobs = [];
+          this.totalCount = 0;
         },
       });
   }
+
 
   onSubmit(): void {
     this.currentPage = 1;

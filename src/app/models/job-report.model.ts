@@ -1,16 +1,28 @@
 export interface JobReportItem {
-  sl: number;
-  jpId: number;
+  jP_ID: number;
   jobTitle: string;
-  cpId: number;
+  cP_ID: number;
+  name?: string;
   companyName: string;
-  categoryName: string;
-  serviceType: string;
   publishDate: string;
-  deadline: string;
-  jobSummary: number;
-  jobDetails: number;
+  adType?: number;
+  regionalJob?: number;
+  summaryView?: string;
+  detailView?: string;
+  applyView?: string;
   totalApply: number;
+  totalRow: number;
+
+  sl?: number;
+  jpId?: number;
+  cpId?: number;
+  categoryName?: string;
+  serviceType?: string | number;
+  jobType?: string;
+  deadline?: string;
+  jobSummary?: number;
+  caT_NAME?: string;
+  jobDetails?: number;
 }
 
 export interface JobReportResponse {
@@ -21,4 +33,10 @@ export interface JobReportResponse {
 export interface ServiceType {
   value: string;
   label: string;
+}
+
+export interface ServiceTypeDropdownOption {
+  label: string;
+  serviceType: number | null;
+  jobType: string | null;
 }
