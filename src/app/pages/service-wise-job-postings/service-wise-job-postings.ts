@@ -38,11 +38,13 @@ export class ServiceWiseJobPostings implements OnInit {
 
   jobs: JobReportItem[] = [];
   totalCount: number = 0;
+  displayCount: number = 0;
   currentPage: number = 1;
   pageSize: number = 20;
   pageSizeOptions = [20, 50, 100];
   isLoading: boolean = false;
   hasSearched: boolean = false;
+  private countAnimationFrame: any = null;
 
   // Search by CPID / JPID
   searchCpid: string = '';
@@ -127,6 +129,8 @@ export class ServiceWiseJobPostings implements OnInit {
 
   fetchJobs(): void {
     this.isLoading = true;
+    this.displayCount = 0;
+    this.startLoadingCount();
     const formattedFrom = this.formatDateToApi(this.fromDate);
     const formattedTo = this.formatDateToApi(this.toDate);
 
@@ -144,11 +148,14 @@ export class ServiceWiseJobPostings implements OnInit {
           this.jobs = res;
           this.totalCount = res.length > 0 ? res[0].totalRow : 0;
           this.isLoading = false;
+          this.animateCount(this.totalCount);
         },
         error: () => {
           this.isLoading = false;
+          this.stopCountAnimation();
           this.jobs = [];
           this.totalCount = 0;
+          this.displayCount = 0;
         },
       });
   }
@@ -216,6 +223,7 @@ export class ServiceWiseJobPostings implements OnInit {
     this.totalCount = filtered.length;
     this.currentPage = 1;
     this.jobs = this.getPagedFilteredJobs();
+    this.animateCount(this.totalCount);
   }
 
   /** Get the current page slice from filteredJobs */
@@ -245,7 +253,63 @@ export class ServiceWiseJobPostings implements OnInit {
     this.isSearchMode = false;
     this.filteredJobs = [];
     this.currentPage = 1;
+    this.displayCount = 0;
     this.fetchJobs();
+  }
+
+  startLoadingCount(): void {
+    this.stopCountAnimation();
+    this.displayCount = 0;
+
+    let lastTimestamp = 0;
+    const step = (timestamp: number) => {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = timestamp - lastTimestamp;
+
+      // Update every 200ms, increment by 1–3 for a slow, readable count
+      if (delta >= 200) {
+        const increment = Math.floor(Math.random() * 3) + 1;
+        this.displayCount += increment;
+        lastTimestamp = timestamp;
+      }
+
+      if (this.isLoading) {
+        this.countAnimationFrame = requestAnimationFrame(step);
+      }
+    };
+
+    this.countAnimationFrame = requestAnimationFrame(step);
+  }
+
+  stopCountAnimation(): void {
+    if (this.countAnimationFrame) {
+      cancelAnimationFrame(this.countAnimationFrame);
+      this.countAnimationFrame = null;
+    }
+  }
+
+  animateCount(target: number): void {
+    this.stopCountAnimation();
+    if (target === 0) { this.displayCount = 0; return; }
+
+    const startValue = this.displayCount;
+    const duration = 700;
+    const startTime = performance.now();
+
+    const step = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      this.displayCount = Math.round(startValue + (target - startValue) * eased);
+
+      if (progress < 1) {
+        this.countAnimationFrame = requestAnimationFrame(step);
+      } else {
+        this.displayCount = target;
+      }
+    };
+
+    this.countAnimationFrame = requestAnimationFrame(step);
   }
 
 
