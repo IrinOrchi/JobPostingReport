@@ -127,10 +127,14 @@ export class ServiceWiseJobPostings implements OnInit {
     return '-';
   }
 
-  fetchJobs(): void {
+  fetchJobs(isPagination: boolean = false): void {
     this.isLoading = true;
-    this.displayCount = 0;
-    this.startLoadingCount();
+
+    if (!isPagination) {
+      this.displayCount = 0;
+      this.startLoadingCount();
+    }
+
     const formattedFrom = this.formatDateToApi(this.fromDate);
     const formattedTo = this.formatDateToApi(this.toDate);
 
@@ -146,9 +150,17 @@ export class ServiceWiseJobPostings implements OnInit {
       .subscribe({
         next: (res) => {
           this.jobs = res;
-          this.totalCount = res.length > 0 ? res[0].totalRow : 0;
+          const newTotal = res.length > 0 ? res[0].totalRow : 0;
+
+          if (!isPagination) {
+            this.totalCount = newTotal;
+            this.animateCount(this.totalCount);
+          } else {
+            this.totalCount = newTotal;
+            this.displayCount = newTotal;
+          }
+
           this.isLoading = false;
-          this.animateCount(this.totalCount);
         },
         error: () => {
           this.isLoading = false;
@@ -337,7 +349,7 @@ export class ServiceWiseJobPostings implements OnInit {
     if (this.isSearchMode) {
       this.jobs = this.getPagedFilteredJobs();
     } else {
-      this.fetchJobs();
+      this.fetchJobs(true);
     }
   }
 
@@ -366,7 +378,7 @@ export class ServiceWiseJobPostings implements OnInit {
       if (this.isSearchMode) {
         this.jobs = this.getPagedFilteredJobs();
       } else {
-        this.fetchJobs();
+        this.fetchJobs(true);
       }
     }
   }
@@ -377,7 +389,7 @@ export class ServiceWiseJobPostings implements OnInit {
       if (this.isSearchMode) {
         this.jobs = this.getPagedFilteredJobs();
       } else {
-        this.fetchJobs();
+        this.fetchJobs(true);
       }
     }
   }
@@ -388,7 +400,7 @@ export class ServiceWiseJobPostings implements OnInit {
       if (this.isSearchMode) {
         this.jobs = this.getPagedFilteredJobs();
       } else {
-        this.fetchJobs();
+        this.fetchJobs(true);
       }
     }
   }
