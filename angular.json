@@ -21,8 +21,8 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/push-notification",
-            "baseHref": "/JobReports/",
+            "outputPath": "dist/job-report",
+            "baseHref": "/Job-View-Report/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [

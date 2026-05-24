@@ -15,13 +15,15 @@ export class ServiceJobPostingsService {
     serviceType: number | null,
     jobType: string | null,
     pageNo: number,
-    pageSize: number
+    pageSize: number,
+    RegionalJob: number | null
   ): Observable<JobReportItem[]> {
     let params = new HttpParams()
       .set('FromPublishDate', fromDate)
       .set('ToPublishDate', toDate)
       .set('PageNo', pageNo.toString())
-      .set('PageSize', pageSize.toString());
+      .set('PageSize', pageSize.toString())
+      .set('RegionalJob', RegionalJob?.toString() || '');
 
     if (serviceType !== null && serviceType !== undefined) {
       params = params.set('ServiceType', serviceType.toString());

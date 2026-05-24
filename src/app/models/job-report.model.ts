@@ -6,7 +6,7 @@ export interface JobReportItem {
   companyName: string;
   publishDate: string;
   adType?: number;
-  regionalJob?: number;
+  RegionalJob?: number;
   summaryView?: string;
   detailView?: string;
   applyView?: string;
@@ -39,4 +39,5 @@ export interface ServiceTypeDropdownOption {
   label: string;
   serviceType: number | null;
   jobType: string | null;
+  RegionalJob: number | null;
 }

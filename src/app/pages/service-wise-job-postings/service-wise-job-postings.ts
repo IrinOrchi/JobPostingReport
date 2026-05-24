@@ -17,16 +17,16 @@ export class ServiceWiseJobPostings implements OnInit {
   toDate: string = '';
 
   serviceTypes: ServiceTypeDropdownOption[] = [
-    { label: 'All', serviceType: null, jobType: null },
-    { label: 'SME', serviceType: 10, jobType: 'J' },
-    { label: 'Standard Listing', serviceType: 0, jobType: 'J' },
-    { label: 'Premium Listing', serviceType: 1, jobType: 'J' },
-    { label: 'Premium Plus', serviceType: 2, jobType: 'J' },
-    { label: 'Hot Job', serviceType: 1, jobType: 'H' },
-    { label: 'PNPL', serviceType: 0, jobType: 'J' },
-    { label: 'Free Listing', serviceType: 12, jobType: 'J' },
-    { label: 'Internship Announcement', serviceType: 13, jobType: 'J' },
-    { label: 'Blue Collar', serviceType: 14, jobType: 'J' }
+    { label: 'All', serviceType: null, jobType: null, RegionalJob: null },
+    { label: 'SME', serviceType: 10, jobType: 'J', RegionalJob: 0 },
+    { label: 'Standard Listing', serviceType: 0, jobType: 'J', RegionalJob: 0 },
+    { label: 'Premium Listing', serviceType: 1, jobType: 'J', RegionalJob: 0 },
+    { label: 'Premium Plus', serviceType: 2, jobType: 'J', RegionalJob: 0 },
+    { label: 'Hot Job', serviceType: 1, jobType: 'H', RegionalJob: 0 },
+    { label: 'PNPL', serviceType: 0, jobType: 'J', RegionalJob: 5 },
+    // { label: 'Free Listing', serviceType: 12, jobType: 'J', RegionalJob: 0 },
+    { label: 'Internship Announcement', serviceType: 13, jobType: 'J', RegionalJob: 0 },
+    { label: 'Blue Collar', serviceType: 14, jobType: 'J', RegionalJob: 0 }
   ];
 
   selectedServiceType: ServiceTypeDropdownOption = this.serviceTypes[0];
@@ -105,18 +105,19 @@ export class ServiceWiseJobPostings implements OnInit {
   }
 
   getServiceTypeName(job: JobReportItem): string {
-    if (job.serviceType !== undefined && job.jobType !== undefined) {
+    if (job.serviceType !== undefined && job.jobType !== undefined && job.RegionalJob !== undefined) {
       const sType = Number(job.serviceType);
       const jType = String(job.jobType);
-      if (sType === 0 && jType === 'J') return 'PNPL';
-      if (sType === 0 && jType === 'J') return 'Standard Listing';
-      if (sType === 1 && jType === 'H') return 'Hot Job';
-      if (sType === 1 && jType === 'J') return 'Premium Listing';
-      if (sType === 2 && jType === 'J') return 'Premium Plus';
-      if (sType === 10 && jType === 'J') return 'SME';
-      if (sType === 12 && jType === 'J') return 'Free Listing';
-      if (sType === 13 && jType === 'J') return 'Internship Announcement';
-      if (sType === 14 && jType === 'J') return 'Blue Collar';
+      const rJob= Number(job.RegionalJob);
+      if (sType === 0 && jType === 'J' && rJob === 5) return 'PNPL';
+      if (sType === 0 && jType === 'J' && rJob === 0) return 'Standard Listing';
+      if (sType === 1 && jType === 'H' && rJob === 0) return 'Hot Job';
+      if (sType === 1 && jType === 'J' && rJob === 0) return 'Premium Listing';
+      if (sType === 2 && jType === 'J' && rJob === 0) return 'Premium Plus';
+      if (sType === 10 && jType === 'J' && rJob === 0) return 'SME';
+      if (sType === 12 && jType === 'J' && rJob === 0) return 'Free Listing';
+      if (sType === 13 && jType === 'J' && rJob === 0) return 'Internship Announcement';
+      if (sType === 14 && jType === 'J' && rJob === 0) return 'Blue Collar';
     }
     if (typeof job.serviceType === 'string' && job.serviceType.length > 0) {
       return job.serviceType;
@@ -145,7 +146,8 @@ export class ServiceWiseJobPostings implements OnInit {
         this.selectedServiceType.serviceType,
         this.selectedServiceType.jobType,
         this.currentPage,
-        this.pageSize
+        this.pageSize,
+        this.selectedServiceType.RegionalJob
       )
       .subscribe({
         next: (res) => {
@@ -194,7 +196,8 @@ export class ServiceWiseJobPostings implements OnInit {
         this.selectedServiceType.serviceType,
         this.selectedServiceType.jobType,
         1,
-        fetchSize
+        fetchSize,
+        this.selectedServiceType.RegionalJob
       )
       .subscribe({
         next: (res) => {
