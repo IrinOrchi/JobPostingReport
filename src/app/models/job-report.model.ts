@@ -6,6 +6,8 @@ export interface JobReportItem {
   companyName: string;
   publishDate: string;
   adType?: number;
+  regionalJob?: number;
+  jType?: string;
   RegionalJob?: number;
   summaryView?: string;
   detailView?: string;

@@ -17,7 +17,7 @@ export class ServiceWiseJobPostings implements OnInit {
   toDate: string = '';
 
   serviceTypes: ServiceTypeDropdownOption[] = [
-    { label: 'All', serviceType: null, jobType: null, RegionalJob: null },
+    { label: 'All', serviceType: -1, jobType: 'all', RegionalJob: 0 },
     { label: 'SME', serviceType: 10, jobType: 'J', RegionalJob: 0 },
     { label: 'Standard Listing', serviceType: 0, jobType: 'J', RegionalJob: 0 },
     { label: 'Premium Listing', serviceType: 1, jobType: 'J', RegionalJob: 0 },
@@ -105,26 +105,40 @@ export class ServiceWiseJobPostings implements OnInit {
   }
 
   getServiceTypeName(job: JobReportItem): string {
-    if (job.serviceType !== undefined && job.jobType !== undefined && job.RegionalJob !== undefined) {
-      const sType = Number(job.serviceType);
-      const jType = String(job.jobType);
-      const rJob= Number(job.RegionalJob);
-      if (sType === 0 && jType === 'J' && rJob === 5) return 'PNPL';
-      if (sType === 0 && jType === 'J' && rJob === 0) return 'Standard Listing';
-      if (sType === 1 && jType === 'H' && rJob === 0) return 'Hot Job';
-      if (sType === 1 && jType === 'J' && rJob === 0) return 'Premium Listing';
-      if (sType === 2 && jType === 'J' && rJob === 0) return 'Premium Plus';
-      if (sType === 10 && jType === 'J' && rJob === 0) return 'SME';
-      if (sType === 12 && jType === 'J' && rJob === 0) return 'Free Listing';
-      if (sType === 13 && jType === 'J' && rJob === 0) return 'Internship Announcement';
-      if (sType === 14 && jType === 'J' && rJob === 0) return 'Blue Collar';
+    const row = job as JobReportItem & Record<string, unknown>;
+    const serviceType =
+      job.adType ?? job.serviceType ?? row['adType'] ?? row['AdType'] ?? row['ServiceType'];
+    const jType =
+      job.jType ?? job.jobType ?? row['jType'] ?? row['JType'] ?? row['jobType'] ?? row['JobType'];
+    const regionalJob =
+      job.regionalJob ?? job.RegionalJob ?? row['regionalJob'] ?? row['RegionalJob'];
+
+    if (
+      serviceType !== undefined &&
+      serviceType !== null &&
+      jType !== undefined &&
+      jType !== null &&
+      regionalJob !== undefined &&
+      regionalJob !== null
+    ) {
+      const sType = Number(serviceType);
+      const jTypeStr = String(jType);
+      const rJob = Number(regionalJob);
+      if (sType === 0 && jTypeStr === 'J' && rJob === 5) return 'PNPL';
+      if (sType === 0 && jTypeStr === 'J' && rJob === 0) return 'Standard Listing';
+      if (sType === 1 && jTypeStr === 'H' && rJob === 0) return 'Hot Job';
+      if (sType === 1 && jTypeStr === 'J' && rJob === 0) return 'Premium Listing';
+      if (sType === 2 && jTypeStr === 'J' && rJob === 0) return 'Premium Plus';
+      if (sType === 10 && jTypeStr === 'J' && rJob === 0) return 'SME';
+      if (sType === 12 && jTypeStr === 'J' && rJob === 0) return 'Free Listing';
+      if (sType === 13 && jTypeStr === 'J' && rJob === 0) return 'Internship Announcement';
+      if (sType === 14 && jTypeStr === 'J' && rJob === 0) return 'Blue Collar';
     }
-    if (typeof job.serviceType === 'string' && job.serviceType.length > 0) {
-      return job.serviceType;
-    }
+
     if (this.selectedServiceType.label !== 'All') {
       return this.selectedServiceType.label;
     }
+
     return '-';
   }
 
@@ -329,12 +343,6 @@ export class ServiceWiseJobPostings implements OnInit {
 
 
   onSubmit(): void {
-    if (this.selectedServiceType.label === 'All') {
-      this.hasSearched = false;
-      this.jobs = [];
-      this.totalCount = 0;
-      return;
-    }
     this.hasSearched = true;
     this.currentPage = 1;
     // Reset search state on new submit
