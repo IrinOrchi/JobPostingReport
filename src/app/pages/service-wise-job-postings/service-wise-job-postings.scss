@@ -196,6 +196,14 @@
   letter-spacing: 0;
 }
 
+.date-range-error {
+  flex: 1 1 100%;
+  margin: -4px 0 0;
+  font-size: .8rem;
+  font-weight: 500;
+  color: #b91c1c;
+}
+
 .form-label.invisible {
   opacity: 0;
   pointer-events: none;

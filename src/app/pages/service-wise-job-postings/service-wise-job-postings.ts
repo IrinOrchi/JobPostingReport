@@ -33,6 +33,9 @@ export class ServiceWiseJobPostings implements OnInit {
 
   todayStr: string = '';
   yesterdayStr: string = '';
+  /** Earliest selectable publish date */
+  readonly minDateStr = '2025-03-25';
+  dateRangeError = '';
 
   isSelectOpen: boolean = false;
 
@@ -81,8 +84,62 @@ export class ServiceWiseJobPostings implements OnInit {
     yesterday.setDate(today.getDate() - 1);
     this.yesterdayStr = this.formatDate(yesterday);
 
-    this.fromDate = this.yesterdayStr;
-    this.toDate = this.yesterdayStr;
+    const defaultDate =
+      this.yesterdayStr >= this.minDateStr ? this.yesterdayStr : this.minDateStr;
+    this.fromDate = defaultDate;
+    this.toDate = defaultDate;
+    this.updateDateRangeError();
+  }
+
+  get toDateMin(): string {
+    if (this.fromDate && this.fromDate >= this.minDateStr) {
+      return this.fromDate;
+    }
+    return this.minDateStr;
+  }
+
+  get isDateRangeValid(): boolean {
+    return (
+      !!this.fromDate &&
+      !!this.toDate &&
+      this.fromDate >= this.minDateStr &&
+      this.toDate >= this.minDateStr &&
+      this.toDate >= this.fromDate &&
+      this.toDate <= this.yesterdayStr &&
+      this.fromDate <= this.yesterdayStr
+    );
+  }
+
+  onFromDateChange(value: string): void {
+    this.fromDate = this.clampDate(value, this.minDateStr, this.yesterdayStr);
+    if (this.toDate < this.fromDate) {
+      this.toDate = this.fromDate;
+    }
+    this.updateDateRangeError();
+  }
+
+  onToDateChange(value: string): void {
+    this.toDate = this.clampDate(value, this.toDateMin, this.yesterdayStr);
+    this.updateDateRangeError();
+  }
+
+  private clampDate(value: string, min: string, max: string): string {
+    if (!value) return min;
+    if (value < min) return min;
+    if (value > max) return max;
+    return value;
+  }
+
+  private updateDateRangeError(): void {
+    if (!this.fromDate || !this.toDate) {
+      this.dateRangeError = '';
+      return;
+    }
+    if (this.toDate < this.fromDate) {
+      this.dateRangeError = 'To Date must be on or after From Date.';
+    } else {
+      this.dateRangeError = '';
+    }
   }
 
   formatDate(date: Date): string {
@@ -343,6 +400,10 @@ export class ServiceWiseJobPostings implements OnInit {
 
 
   onSubmit(): void {
+    this.updateDateRangeError();
+    if (!this.isDateRangeValid) {
+      return;
+    }
     this.hasSearched = true;
     this.currentPage = 1;
     // Reset search state on new submit

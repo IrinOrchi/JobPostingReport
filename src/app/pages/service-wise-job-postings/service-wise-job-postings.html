@@ -44,7 +44,9 @@
             From Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input" [(ngModel)]="fromDate" [max]="yesterdayStr" />
+            <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input"
+              [ngModel]="fromDate" (ngModelChange)="onFromDateChange($event)"
+              [min]="minDateStr" [max]="yesterdayStr" />
           </div>
         </div>
 
@@ -56,9 +58,15 @@
             To Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
-            <input type="date" #toDateInput (click)="toDateInput.showPicker()" id="toDate" class="form-input" [(ngModel)]="toDate" [max]="yesterdayStr" />
+            <input type="date" #toDateInput (click)="toDateInput.showPicker()" id="toDate" class="form-input"
+              [ngModel]="toDate" (ngModelChange)="onToDateChange($event)"
+              [min]="toDateMin" [max]="yesterdayStr" />
           </div>
         </div>
+
+        @if (dateRangeError) {
+          <p class="date-range-error" role="alert">{{ dateRangeError }}</p>
+        }
 
         <div class="form-group">
           <label class="form-label">
@@ -90,7 +98,7 @@
 
         <div class="form-group form-group--action">
           <label class="form-label invisible">Submit</label>
-          <button id="submitBtn" class="submit-btn" (click)="onSubmit()" [disabled]="isLoading">
+          <button id="submitBtn" class="submit-btn" (click)="onSubmit()" [disabled]="isLoading || !isDateRangeValid">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
