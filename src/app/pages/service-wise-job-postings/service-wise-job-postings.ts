@@ -58,6 +58,14 @@ export class ServiceWiseJobPostings implements OnInit {
   filteredJobs: JobReportItem[] = [];
   allDataFetched: boolean = false;
 
+  sortColumn: 'summaryView' | 'detailView' | 'totalApply' | null = null;
+  sortDirection: 'asc' | 'desc' = 'asc';
+  private readonly defaultSortColumns: Array<'summaryView' | 'detailView' | 'totalApply'> = [
+    'summaryView',
+    'detailView',
+    'totalApply',
+  ];
+
   constructor(private jobService: ServiceJobPostingsService) {}
 
   ngOnInit(): void {
@@ -200,6 +208,11 @@ export class ServiceWiseJobPostings implements OnInit {
   }
 
   fetchJobs(isPagination: boolean = false): void {
+    if (this.allDataFetched && !this.isSearchMode) {
+      this.jobs = this.getPagedAllJobs();
+      return;
+    }
+
     this.isLoading = true;
 
     if (!isPagination) {
@@ -209,6 +222,7 @@ export class ServiceWiseJobPostings implements OnInit {
 
     const formattedFrom = this.formatDateToApi(this.fromDate);
     const formattedTo = this.formatDateToApi(this.toDate);
+    const fetchSize = this.totalCount > 0 ? this.totalCount : 100000;
 
     this.jobService
       .getJobPostings(
@@ -216,20 +230,22 @@ export class ServiceWiseJobPostings implements OnInit {
         formattedTo,
         this.selectedServiceType.serviceType,
         this.selectedServiceType.jobType,
-        this.currentPage,
-        this.pageSize,
+        1,
+        fetchSize,
         this.selectedServiceType.RegionalJob
       )
       .subscribe({
         next: (res) => {
-          this.jobs = res;
-          const newTotal = res.length > 0 ? res[0].totalRow : 0;
+          this.allJobs = this.sortJobList(res);
+          this.allDataFetched = true;
+          const newTotal = res.length > 0 ? res[0].totalRow : res.length;
+
+          this.totalCount = newTotal;
+          this.jobs = this.getPagedAllJobs();
 
           if (!isPagination) {
-            this.totalCount = newTotal;
             this.animateCount(this.totalCount);
           } else {
-            this.totalCount = newTotal;
             this.displayCount = newTotal;
           }
 
@@ -239,6 +255,8 @@ export class ServiceWiseJobPostings implements OnInit {
           this.isLoading = false;
           this.stopCountAnimation();
           this.jobs = [];
+          this.allJobs = [];
+          this.allDataFetched = false;
           this.totalCount = 0;
           this.displayCount = 0;
         },
@@ -305,7 +323,7 @@ export class ServiceWiseJobPostings implements OnInit {
       );
     }
 
-    this.filteredJobs = filtered;
+    this.filteredJobs = this.sortJobList(filtered);
     this.totalCount = filtered.length;
     this.currentPage = 1;
     this.jobs = this.getPagedFilteredJobs();
@@ -319,6 +337,13 @@ export class ServiceWiseJobPostings implements OnInit {
     return this.filteredJobs.slice(start, end);
   }
 
+  /** Get the current page slice from allJobs */
+  getPagedAllJobs(): JobReportItem[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    return this.allJobs.slice(start, end);
+  }
+
   /** Triggered when user clicks the search button */
   onSearchById(): void {
     const cpidTerm = this.searchCpid.trim();
@@ -329,7 +354,11 @@ export class ServiceWiseJobPostings implements OnInit {
     }
 
     this.isSearchMode = true;
-    this.fetchAllJobs();
+    if (this.allDataFetched) {
+      this.applyLocalFilter();
+    } else {
+      this.fetchAllJobs();
+    }
   }
 
   /** Clear search and revert to normal paginated view */
@@ -406,6 +435,8 @@ export class ServiceWiseJobPostings implements OnInit {
     }
     this.hasSearched = true;
     this.currentPage = 1;
+    this.sortColumn = null;
+    this.sortDirection = 'asc';
     // Reset search state on new submit
     this.isSearchMode = false;
     this.searchCpid = '';
@@ -420,6 +451,8 @@ export class ServiceWiseJobPostings implements OnInit {
     this.currentPage = 1;
     if (this.isSearchMode) {
       this.jobs = this.getPagedFilteredJobs();
+    } else if (this.allDataFetched) {
+      this.jobs = this.getPagedAllJobs();
     } else {
       this.fetchJobs(true);
     }
@@ -449,6 +482,8 @@ export class ServiceWiseJobPostings implements OnInit {
       this.currentPage = page;
       if (this.isSearchMode) {
         this.jobs = this.getPagedFilteredJobs();
+      } else if (this.allDataFetched) {
+        this.jobs = this.getPagedAllJobs();
       } else {
         this.fetchJobs(true);
       }
@@ -460,6 +495,8 @@ export class ServiceWiseJobPostings implements OnInit {
       this.currentPage--;
       if (this.isSearchMode) {
         this.jobs = this.getPagedFilteredJobs();
+      } else if (this.allDataFetched) {
+        this.jobs = this.getPagedAllJobs();
       } else {
         this.fetchJobs(true);
       }
@@ -471,6 +508,8 @@ export class ServiceWiseJobPostings implements OnInit {
       this.currentPage++;
       if (this.isSearchMode) {
         this.jobs = this.getPagedFilteredJobs();
+      } else if (this.allDataFetched) {
+        this.jobs = this.getPagedAllJobs();
       } else {
         this.fetchJobs(true);
       }
@@ -483,5 +522,79 @@ export class ServiceWiseJobPostings implements OnInit {
 
   getEndRecord(): number {
     return Math.min(this.currentPage * this.pageSize, this.totalCount);
+  }
+
+  toggleSort(column: 'summaryView' | 'detailView' | 'totalApply'): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'desc' ? 'asc' : 'desc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'desc';
+    }
+    this.applyCurrentSort();
+  }
+
+  private applyCurrentSort(): void {
+    this.currentPage = 1;
+    if (this.isSearchMode) {
+      this.filteredJobs = this.sortJobList(this.filteredJobs);
+      this.jobs = this.getPagedFilteredJobs();
+    } else if (this.allDataFetched) {
+      this.allJobs = this.sortJobList(this.allJobs);
+      this.jobs = this.getPagedAllJobs();
+    } else {
+      this.jobs = this.sortJobList(this.jobs);
+    }
+  }
+
+  private getNumericSortValue(
+    job: JobReportItem,
+    column: 'summaryView' | 'detailView' | 'totalApply'
+  ): number {
+    switch (column) {
+      case 'summaryView':
+        return Number(job.summaryView) || 0;
+      case 'detailView':
+        return Number(job.detailView) || 0;
+      case 'totalApply':
+        return Number(job.totalApply) || 0;
+    }
+  }
+
+  isDefaultSort(): boolean {
+    return this.sortColumn === null;
+  }
+
+  isColumnAsc(column: 'summaryView' | 'detailView' | 'totalApply'): boolean {
+    return this.isDefaultSort() || (this.sortColumn === column && this.sortDirection === 'asc');
+  }
+
+  isColumnDesc(column: 'summaryView' | 'detailView' | 'totalApply'): boolean {
+    return this.sortColumn === column && this.sortDirection === 'desc';
+  }
+
+  isColumnSortActive(column: 'summaryView' | 'detailView' | 'totalApply'): boolean {
+    return this.isDefaultSort() || this.sortColumn === column;
+  }
+
+  private sortJobList(list: JobReportItem[]): JobReportItem[] {
+    return [...list].sort((a, b) => {
+      if (this.sortColumn === null) {
+        for (const col of this.defaultSortColumns) {
+          const diff = this.getNumericSortValue(a, col) - this.getNumericSortValue(b, col);
+          if (diff !== 0) {
+            return diff;
+          }
+        }
+        return 0;
+      }
+
+      const direction = this.sortDirection === 'asc' ? 1 : -1;
+      return (
+        (this.getNumericSortValue(a, this.sortColumn) -
+          this.getNumericSortValue(b, this.sortColumn)) *
+        direction
+      );
+    });
   }
 }
