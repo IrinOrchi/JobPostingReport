@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ServiceJobPostingsService } from '../../services/serviceJobPostings.service';
+import { ServiceJobPostingsService, LocationItem } from '../../services/serviceJobPostings.service';
 import { JobReportItem, ServiceTypeDropdownOption } from '../../models/job-report.model';
+import { Subject, debounceTime, distinctUntilChanged, switchMap, EMPTY } from 'rxjs';
 
 
 
@@ -66,10 +67,67 @@ export class ServiceWiseJobPostings implements OnInit {
     'totalApply',
   ];
 
-  constructor(private jobService: ServiceJobPostingsService) {}
+  // Location search state
+  locationSearchText: string = '';
+  locations: LocationItem[] = [];
+  selectedLocation: LocationItem | null = null;
+  isLocationDropdownOpen: boolean = false;
+  isLocationLoading: boolean = false;
+  private locationSearchSubject = new Subject<string>();
+
+  constructor(private jobService: ServiceJobPostingsService) { }
 
   ngOnInit(): void {
     this.initDates();
+    this.initLocationSearch();
+  }
+
+  private initLocationSearch(): void {
+    this.locationSearchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(term => {
+        if (term.length < 2) {
+          this.locations = [];
+          this.isLocationLoading = false;
+          return EMPTY;
+        }
+        this.isLocationLoading = true;
+        return this.jobService.getLocations(term);
+      })
+    ).subscribe({
+      next: (res) => {
+        this.locations = res.data || [];
+        this.isLocationLoading = false;
+        this.isLocationDropdownOpen = this.locations.length > 0;
+      },
+      error: () => {
+        this.isLocationLoading = false;
+        this.locations = [];
+      }
+    });
+  }
+
+  onLocationInput(value: string): void {
+    this.locationSearchText = value;
+    if (!value) {
+      this.selectedLocation = null;
+      this.locations = [];
+      this.isLocationDropdownOpen = false;
+    }
+    this.locationSearchSubject.next(value);
+  }
+
+  selectLocation(location: LocationItem): void {
+    this.selectedLocation = location;
+    this.locationSearchText = location.name;
+    this.isLocationDropdownOpen = false;
+  }
+
+  toggleLocationDropdown(): void {
+    if (this.locations.length > 0) {
+      this.isLocationDropdownOpen = !this.isLocationDropdownOpen;
+    }
   }
 
   selectServiceType(opt: ServiceTypeDropdownOption): void {

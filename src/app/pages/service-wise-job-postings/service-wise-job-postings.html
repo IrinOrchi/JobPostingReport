@@ -5,9 +5,12 @@
     <div class="header-content">
       <div class="header-title-group">
         <div class="header-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-            <line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+            <line x1="12" y1="12" x2="12" y2="16" />
+            <line x1="10" y1="14" x2="14" y2="14" />
           </svg>
         </div>
         <div>
@@ -15,9 +18,11 @@
           <p class="page-subtitle">Service Wise Overview</p>
         </div>
       </div>
-      <a class="home-link" routerLink="/">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      <a class="home-link" href="https://mis.bdjobs.com/mis/SupportCRM/checkUserStatus.asp?">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
         Home
       </a>
@@ -28,8 +33,10 @@
   <div class="panel search-panel">
     <div class="panel-header">
       <div class="panel-header-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8" />
+          <line x1="21" y1="21" x2="16.65" y2="16.65" />
         </svg>
       </div>
       <span>Search Panel</span>
@@ -38,69 +45,128 @@
       <div class="search-form">
         <div class="form-group">
           <label class="form-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
-              <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-calendar-days">
+              <path d="M8 2v4" />
+              <path d="M16 2v4" />
+              <rect width="18" height="18" x="3" y="4" rx="2" />
+              <path d="M3 10h18" />
+              <path d="M8 14h.01" />
+              <path d="M12 14h.01" />
+              <path d="M16 14h.01" />
+              <path d="M8 18h.01" />
+              <path d="M12 18h.01" />
+              <path d="M16 18h.01" />
             </svg>
             From Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
             <input type="date" #fromDateInput (click)="fromDateInput.showPicker()" id="fromDate" class="form-input"
-              [ngModel]="fromDate" (ngModelChange)="onFromDateChange($event)"
-              [min]="minDateStr" [max]="yesterdayStr" />
+              [ngModel]="fromDate" (ngModelChange)="onFromDateChange($event)" [min]="minDateStr" [max]="yesterdayStr" />
           </div>
         </div>
 
         <div class="form-group">
           <label class="form-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
-              <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              class="lucide lucide-calendar-days">
+              <path d="M8 2v4" />
+              <path d="M16 2v4" />
+              <rect width="18" height="18" x="3" y="4" rx="2" />
+              <path d="M3 10h18" />
+              <path d="M8 14h.01" />
+              <path d="M12 14h.01" />
+              <path d="M16 14h.01" />
+              <path d="M8 18h.01" />
+              <path d="M12 18h.01" />
+              <path d="M16 18h.01" />
             </svg>
             To Date <span class="label-hint">(Publish Date)</span>
           </label>
           <div class="input-wrapper">
             <input type="date" #toDateInput (click)="toDateInput.showPicker()" id="toDate" class="form-input"
-              [ngModel]="toDate" (ngModelChange)="onToDateChange($event)"
-              [min]="toDateMin" [max]="yesterdayStr" />
+              [ngModel]="toDate" (ngModelChange)="onToDateChange($event)" [min]="toDateMin" [max]="yesterdayStr" />
           </div>
         </div>
 
-        @if (dateRangeError) {
-          <p class="date-range-error" role="alert">{{ dateRangeError }}</p>
-        }
-
         <div class="form-group">
           <label class="form-label">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
             </svg>
             Service Type
           </label>
           <div class="input-wrapper select-wrapper">
             <div class="custom-select-trigger" [class.open]="isSelectOpen" (click)="isSelectOpen = !isSelectOpen">
               <span>{{ selectedServiceType.label }}</span>
-              <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"/>
+              <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
               </svg>
             </div>
             @if (isSelectOpen) {
-              <div class="custom-dropdown-menu">
-                @for (type of serviceTypes; track type.label) {
-                  <div class="custom-dropdown-item" 
-                       [class.active]="selectedServiceType.label === type.label"
-                       (click)="selectServiceType(type)">
-                    {{ type.label }}
-                  </div>
-                }
+            <div class="custom-dropdown-menu">
+              @for (type of serviceTypes; track type.label) {
+              <div class="custom-dropdown-item" [class.active]="selectedServiceType.label === type.label"
+                (click)="selectServiceType(type)">
+                {{ type.label }}
               </div>
+              }
+            </div>
             }
           </div>
         </div>
 
+        <div class="form-group">
+          <label class="form-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            Location
+          </label>
+          <div class="input-wrapper select-wrapper">
+            <input type="text" class="form-input" placeholder="Type city or area..." [ngModel]="locationSearchText"
+              (ngModelChange)="onLocationInput($event)"
+              (focus)="locations.length > 0 && (isLocationDropdownOpen = true)"
+              (blur)="isLocationDropdownOpen = false" />
+
+            @if (isLocationLoading) {
+            <div class="input-loading-icon">
+              <div class="spinner-xs"></div>
+            </div>
+            }
+
+            @if (isLocationDropdownOpen && locations.length > 0) {
+            <div class="custom-dropdown-menu">
+              @for (loc of locations; track loc.id) {
+              <div class="custom-dropdown-item" [class.active]="selectedLocation?.id === loc.id"
+                (mousedown)="selectLocation(loc)">
+                {{ loc.name }}
+              </div>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        @if (dateRangeError) {
+        <p class="date-range-error" role="alert">{{ dateRangeError }}</p>
+        }
+
         <div class="form-group form-group--action">
           <label class="form-label invisible">Submit</label>
           <button id="submitBtn" class="submit-btn" (click)="onSubmit()" [disabled]="isLoading || !isDateRangeValid">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <span>{{ isLoading ? 'Loading...' : 'Submit' }}</span>
           </button>
@@ -113,9 +179,14 @@
   <div class="panel results-panel">
     <div class="panel-header">
       <div class="panel-header-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/>
-          <line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="6" x2="3.01" y2="6" />
+          <line x1="3" y1="12" x2="3.01" y2="12" />
+          <line x1="3" y1="18" x2="3.01" y2="18" />
         </svg>
       </div>
       <span>Job Posting Report – Service Wise</span>
@@ -125,243 +196,288 @@
 
       <!-- Placeholder: shown when All is selected or no search done yet -->
       @if (!hasSearched) {
-        <div class="no-search-placeholder">
-          <div class="placeholder-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-              <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-              <line x1="9" y1="12" x2="15" y2="12"/>
-              <line x1="9" y1="16" x2="13" y2="16"/>
-            </svg>
-          </div>
-          <h3 class="placeholder-title">Select Filters to Generate Report</h3>
-          <p class="placeholder-desc">
-            Please select a <strong>From Date</strong> and <strong>To Date</strong>, choose a <strong>Service Type</strong>
-            (or <strong>All</strong> for every type) from the search panel above,
-            then click <strong>Submit</strong> to load the report.
-          </p>
-          <!-- <div class="placeholder-chips">
+      <div class="no-search-placeholder">
+        <div class="placeholder-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+            <line x1="9" y1="12" x2="15" y2="12" />
+            <line x1="9" y1="16" x2="13" y2="16" />
+          </svg>
+        </div>
+        <h3 class="placeholder-title">Select Filters to Generate Report</h3>
+        <p class="placeholder-desc">
+          Please select a <strong>From Date</strong> and <strong>To Date</strong>, choose a <strong>Service
+            Type</strong>
+          (or <strong>All</strong> for every type) from the search panel above,
+          then click <strong>Submit</strong> to load the report.
+        </p>
+        <!-- <div class="placeholder-chips">
             @for (type of serviceTypes; track type.label) {
               @if (type.label !== 'All') {
                 <span class="placeholder-chip" (click)="selectServiceType(type)">{{ type.label }}</span>
               }
             }
           </div> -->
-        </div>
+      </div>
       }
 
       <!-- Table section: shown only after a valid search -->
       @if (hasSearched) {
 
-        <!-- Table Controls Top -->
-        <div class="table-controls">
-          <div class="page-size-control">
-            <span class="control-label">Records per page</span>
-            <select id="pageSizeSelect" class="page-size-select" [(ngModel)]="pageSize" (ngModelChange)="onPageSizeChange()">
-              @for (opt of pageSizeOptions; track opt) {
-                <option [ngValue]="opt">{{ opt }}</option>
-              }
-            </select>
-          </div>
+      <!-- Table Controls Top -->
+      <div class="table-controls">
+        <div class="page-size-control">
+          <span class="control-label">Records per page</span>
+          <select id="pageSizeSelect" class="page-size-select" [(ngModel)]="pageSize"
+            (ngModelChange)="onPageSizeChange()">
+            @for (opt of pageSizeOptions; track opt) {
+            <option [ngValue]="opt">{{ opt }}</option>
+            }
+          </select>
+        </div>
 
-          <div class="total-badge">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-            </svg>
-            Total <strong class="count-animate">{{ displayCount | number }}</strong> {{ isLoading ? 'Jobs found' : (totalCount <= 1 ? 'Job found' : 'Jobs found') }}
-          </div>
+        <div class="total-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+          </svg>
+          Total <strong class="count-animate">{{ displayCount | number }}</strong> {{ isLoading ? 'Jobs found' :
+          (totalCount <= 1 ? 'Job found' : 'Jobs found' ) }} </div>
 
-          @if (totalPages > 1) {
+            @if (totalPages > 1) {
             <div class="pagination">
               <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
               </button>
               @for (page of visiblePages; track page) {
-                @if (page !== '...') {
-                  <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
-                } @else {
-                  <span class="page-ellipsis">…</span>
-                }
+              @if (page !== '...') {
+              <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page
+                }}</button>
+              } @else {
+              <span class="page-ellipsis">…</span>
               }
-              <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              }
+              <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages"
+                title="Next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
               </button>
             </div>
-          }
+            }
         </div>
 
         <!-- Search by CPID / JPID -->
         <div class="id-search-bar">
           <div class="id-search-group">
-             <div class="id-search-field">
+            <div class="id-search-field">
               <label class="id-search-label">JP_ID</label>
-              <input type="text" class="id-search-input" placeholder="Search JP_ID..."
-                     [(ngModel)]="searchJpid"
-                     (keyup.enter)="onSearchById()" />
+              <input type="text" class="id-search-input" placeholder="Search JP_ID..." [(ngModel)]="searchJpid"
+                (keyup.enter)="onSearchById()" />
             </div>
             <div class="id-search-field">
               <label class="id-search-label">CP_ID</label>
-              <input type="text" class="id-search-input" placeholder="Search CP_ID..."
-                     [(ngModel)]="searchCpid"
-                     (keyup.enter)="onSearchById()" />
+              <input type="text" class="id-search-input" placeholder="Search CP_ID..." [(ngModel)]="searchCpid"
+                (keyup.enter)="onSearchById()" />
             </div>
-           
-            <button class="id-search-btn" (click)="onSearchById()" [disabled]="isLoading || (!searchCpid.trim() && !searchJpid.trim())">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+
+            <button class="id-search-btn" (click)="onSearchById()"
+              [disabled]="isLoading || (!searchCpid.trim() && !searchJpid.trim())">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
               Search
             </button>
             @if (isSearchMode) {
-              <button class="id-clear-btn" (click)="clearSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-                Clear
-              </button>
+            <button class="id-clear-btn" (click)="clearSearch()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+              Clear
+            </button>
             }
           </div>
           @if (isSearchMode) {
-            <div class="id-search-status">
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              Showing <strong>{{ filteredJobs.length | number }}</strong> filtered result{{ filteredJobs.length !== 1 ? 's' : '' }} from all data
-            </div>
+          <div class="id-search-status">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            Showing <strong>{{ filteredJobs.length | number }}</strong> filtered result{{ filteredJobs.length !== 1 ?
+            's' : '' }} from all data
+          </div>
           }
         </div>
 
         <!-- Loading State -->
         @if (isLoading) {
-          <div class="loading-overlay">
-            <div class="spinner"></div>
-            <span>Loading records...</span>
-          </div>
+        <div class="loading-overlay">
+          <div class="spinner"></div>
+          <span>Loading records...</span>
+        </div>
         }
 
         <!-- Table -->
         @if (!isLoading) {
-          <div class="table-container">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th class="col-sl">Sl.</th>
-                  <th class="col-jp">JP_ID</th>
-                  <th class="col-title">Job Title</th>
-                  <th class="col-cp">CP_ID</th>
-                  <th class="col-company">Company Name</th>
-                  <th class="col-category">Category Name</th>
-                  <th class="col-service">Service Type</th>
-                  <th class="col-publish">Publish Date</th>
-                  <th class="col-deadline">Deadline</th>
-                  <th class="col-summary sortable" [class.sort-active]="isColumnSortActive('summaryView')" (click)="toggleSort('summaryView')">
-                    <span class="sortable-label">Job Summary</span>
-                    <span class="sort-indicator" [class.asc]="isColumnAsc('summaryView')" [class.desc]="isColumnDesc('summaryView')">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
-                    </span>
-                  </th>
-                  <th class="col-details sortable" [class.sort-active]="isColumnSortActive('detailView')" (click)="toggleSort('detailView')">
-                    <span class="sortable-label">Job Details</span>
-                    <span class="sort-indicator" [class.asc]="isColumnAsc('detailView')" [class.desc]="isColumnDesc('detailView')">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
-                    </span>
-                  </th>
-                  <th class="col-apply sortable" [class.sort-active]="isColumnSortActive('totalApply')" (click)="toggleSort('totalApply')">
-                    <span class="sortable-label">Total Apply</span>
-                    <span class="sort-indicator" [class.asc]="isColumnAsc('totalApply')" [class.desc]="isColumnDesc('totalApply')">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (job of jobs; track job.jP_ID; let i = $index) {
-                  <tr class="data-row" [class.row-alt]="i % 2 === 1">
-                    <td class="col-sl">
-                      <span class="sl-badge">{{ getSerialNumber(i) }}</span>
-                    </td>
-                    <td class="col-jp">
-                      <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
-                    </td>
-                    <td class="col-title">
-                      <span class="job-title-text">{{ job.jobTitle }}</span>
-                    </td>
-                    <td class="col-cp">
-                      <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>
-                    </td>
-                    <td class="col-company">
-                      <span class="company-name">{{ job.companyName }}</span>
-                    </td>
-                    <td class="col-category">
-                      <span class="category-text">{{ job.caT_NAME || '-' }}</span>
-                    </td>
-                    <td class="col-service">
-                      <span class="service-text">{{ getServiceTypeName(job) }}</span>
-                    </td>
-                    <td class="col-publish">
-                      <span class="date-text">{{ job.publishDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
-                    </td>
-                    <td class="col-deadline">
-                      <span class="date-text">{{ job.deadLine | date:'yyyy-MM-dd HH:mm:ss' }}</span>
-                    </td>
-                    <td class="col-summary">
-                      <span class="stat-value">{{ job.summaryView || 0 }}</span>
-                    </td>
-                    <td class="col-details">
-                      <span class="stat-value">{{ job.detailView || 0 }}</span>
-                    </td>
-                    <td class="col-apply">
-                      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-                        <span class="apply-count">{{ job.totalApply }}</span>
-                        <span style="font-size: 0.65rem; color: var(--text-muted);">Views: {{ job.applyView || 0 }}</span>
-                      </div>
-                    </td>
-                  </tr>
-                } @empty {
-                  <!-- Empty State -->
-                  <tr>
-                    <td colspan="12" class="empty-state">
-                      <div class="empty-content">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                        </svg>
-                        <p>No records found for the selected criteria.</p>
-                      </div>
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
+        <div class="table-container">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-sl">Sl.</th>
+                <th class="col-jp">JP_ID</th>
+                <th class="col-title">Job Title</th>
+                <th class="col-cp">CP_ID</th>
+                <th class="col-company">Company Name</th>
+                <th class="col-category">Category Name</th>
+                <th class="col-service">Service Type</th>
+                <th class="col-publish">Publish Date</th>
+                <th class="col-deadline">Deadline</th>
+                <th class="col-summary sortable" [class.sort-active]="isColumnSortActive('summaryView')"
+                  (click)="toggleSort('summaryView')">
+                  <span class="sortable-label">Job Summary</span>
+                  <span class="sort-indicator" [class.asc]="isColumnAsc('summaryView')"
+                    [class.desc]="isColumnDesc('summaryView')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m7 15 5 5 5-5" />
+                      <path d="m7 9 5-5 5 5" />
+                    </svg>
+                  </span>
+                </th>
+                <th class="col-details sortable" [class.sort-active]="isColumnSortActive('detailView')"
+                  (click)="toggleSort('detailView')">
+                  <span class="sortable-label">Job Details</span>
+                  <span class="sort-indicator" [class.asc]="isColumnAsc('detailView')"
+                    [class.desc]="isColumnDesc('detailView')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m7 15 5 5 5-5" />
+                      <path d="m7 9 5-5 5 5" />
+                    </svg>
+                  </span>
+                </th>
+                <th class="col-apply sortable" [class.sort-active]="isColumnSortActive('totalApply')"
+                  (click)="toggleSort('totalApply')">
+                  <span class="sortable-label">Total Apply</span>
+                  <span class="sort-indicator" [class.asc]="isColumnAsc('totalApply')"
+                    [class.desc]="isColumnDesc('totalApply')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m7 15 5 5 5-5" />
+                      <path d="m7 9 5-5 5 5" />
+                    </svg>
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (job of jobs; track job.jP_ID; let i = $index) {
+              <tr class="data-row" [class.row-alt]="i % 2 === 1">
+                <td class="col-sl">
+                  <span class="sl-badge">{{ getSerialNumber(i) }}</span>
+                </td>
+                <td class="col-jp">
+                  <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
+                </td>
+                <td class="col-title">
+                  <span class="job-title-text">{{ job.jobTitle }}</span>
+                </td>
+                <td class="col-cp">
+                  <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>
+                </td>
+                <td class="col-company">
+                  <span class="company-name">{{ job.companyName }}</span>
+                </td>
+                <td class="col-category">
+                  <span class="category-text">{{ job.caT_NAME || '-' }}</span>
+                </td>
+                <td class="col-service">
+                  <span class="service-text">{{ getServiceTypeName(job) }}</span>
+                </td>
+                <td class="col-publish">
+                  <span class="date-text">{{ job.publishDate | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                </td>
+                <td class="col-deadline">
+                  <span class="date-text">{{ job.deadLine | date:'yyyy-MM-dd HH:mm:ss' }}</span>
+                </td>
+                <td class="col-summary">
+                  <span class="stat-value">{{ job.summaryView || 0 }}</span>
+                </td>
+                <td class="col-details">
+                  <span class="stat-value">{{ job.detailView || 0 }}</span>
+                </td>
+                <td class="col-apply">
+                  <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                    <span class="apply-count">{{ job.totalApply }}</span>
+                    <span style="font-size: 0.65rem; color: var(--text-muted);">Views: {{ job.applyView || 0 }}</span>
+                  </div>
+                </td>
+              </tr>
+              } @empty {
+              <!-- Empty State -->
+              <tr>
+                <td colspan="12" class="empty-state">
+                  <div class="empty-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <p>No records found for the selected criteria.</p>
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
 
-          <!-- Bottom Pagination -->
-          @if (totalPages > 1) {
-            <div class="table-controls table-controls--bottom">
-              <div class="pagination-info">
-                Showing {{ (currentPage - 1) * pageSize + 1 }} – {{ getEndRecord() }} of {{ totalCount | number }} records
-              </div>
-              <div class="pagination">
-                <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                @for (page of visiblePages; track page) {
-                  @if (page !== '...') {
-                    <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
-                  } @else {
-                    <span class="page-ellipsis">…</span>
-                  }
-                }
-                <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-              </div>
-            </div>
-          }
+        <!-- Bottom Pagination -->
+        @if (totalPages > 1) {
+        <div class="table-controls table-controls--bottom">
+          <div class="pagination-info">
+            Showing {{ (currentPage - 1) * pageSize + 1 }} – {{ getEndRecord() }} of {{ totalCount | number }} records
+          </div>
+          <div class="pagination">
+            <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            @for (page of visiblePages; track page) {
+            @if (page !== '...') {
+            <button class="page-btn" [class.active]="currentPage === page" (click)="goToPage(page)">{{ page }}</button>
+            } @else {
+            <span class="page-ellipsis">…</span>
+            }
+            }
+            <button class="page-btn nav-btn" (click)="nextPage()" [disabled]="currentPage === totalPages" title="Next">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        }
         }
 
-      }
+        }
 
+      </div>
     </div>
   </div>
-</div>
