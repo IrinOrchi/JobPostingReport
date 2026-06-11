@@ -759,6 +759,13 @@
 
 .col-title {
   width: 14%;
+}
+
+thead th.col-title {
+  text-align: center !important;
+}
+
+tbody td.col-title {
   text-align: left !important;
 }
 
@@ -768,6 +775,13 @@
 
 .col-company {
   width: 16%;
+}
+
+thead th.col-company {
+  text-align: center !important;
+}
+
+tbody td.col-company {
   text-align: left !important;
 }
 
@@ -822,6 +836,10 @@
 
 .link-primary:hover {
   color: var(--primary-dark);
+  text-decoration: none;
+}
+
+.job-title-link:hover {
   text-decoration: underline;
 }
 

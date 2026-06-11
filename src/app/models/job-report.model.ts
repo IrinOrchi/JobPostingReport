@@ -25,6 +25,7 @@ export interface JobReportItem {
   jobSummary?: number;
   caT_NAME?: string;
   jobDetails?: number;
+  jobDetailsLink?: string;
 }
 
 export interface JobReportResponse {

@@ -25,7 +25,8 @@ export class ServiceJobPostingsService {
     jobType: string | null,
     pageNo: number,
     pageSize: number,
-    RegionalJob: number | null
+    RegionalJob: number | null,
+    locationId?: number | null
   ): Observable<JobReportItem[]> {
     let params = new HttpParams()
       .set('FromPublishDate', fromDate)
@@ -39,6 +40,9 @@ export class ServiceJobPostingsService {
     }
     if (jobType !== null && jobType !== undefined) {
       params = params.set('JobType', jobType);
+    }
+    if (locationId !== null && locationId !== undefined) {
+      params = params.set('LocationID', locationId.toString());
     }
 
     return this.http.get<JobReportItem[]>(this.apiUrl, { params });

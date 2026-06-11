@@ -102,7 +102,7 @@
             Service Type
           </label>
           <div class="input-wrapper select-wrapper">
-            <div class="custom-select-trigger" [class.open]="isSelectOpen" (click)="isSelectOpen = !isSelectOpen">
+            <div class="custom-select-trigger" [class.open]="isSelectOpen" (click)="toggleServiceDropdown($event)">
               <span>{{ selectedServiceType.label }}</span>
               <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -133,9 +133,7 @@
           </label>
           <div class="input-wrapper select-wrapper">
             <input type="text" class="form-input" placeholder="Type city or area..." [ngModel]="locationSearchText"
-              (ngModelChange)="onLocationInput($event)"
-              (focus)="locations.length > 0 && (isLocationDropdownOpen = true)"
-              (blur)="isLocationDropdownOpen = false" />
+              (ngModelChange)="onLocationInput($event)" (focus)="onLocationFocus()" />
 
             @if (isLocationLoading) {
             <div class="input-loading-icon">
@@ -393,7 +391,12 @@
                   <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
                 </td>
                 <td class="col-title">
+                  @if (job.jobDetailsLink) {
+                  <a href="javascript:void(0)" (click)="openJobDetails(job.jobDetailsLink)"
+                    class="link-primary job-title-link">{{ job.jobTitle }}</a>
+                  } @else {
                   <span class="job-title-text">{{ job.jobTitle }}</span>
+                  }
                 </td>
                 <td class="col-cp">
                   <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>

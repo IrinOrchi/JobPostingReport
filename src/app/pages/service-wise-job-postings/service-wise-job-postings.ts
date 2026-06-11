@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ServiceJobPostingsService, LocationItem } from '../../services/serviceJobPostings.service';
@@ -75,11 +75,37 @@ export class ServiceWiseJobPostings implements OnInit {
   isLocationLoading: boolean = false;
   private locationSearchSubject = new Subject<string>();
 
-  constructor(private jobService: ServiceJobPostingsService) { }
+  constructor(
+    private jobService: ServiceJobPostingsService,
+    private elRef: ElementRef
+  ) { }
 
   ngOnInit(): void {
     this.initDates();
     this.initLocationSearch();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elRef.nativeElement.contains(event.target)) {
+      this.isSelectOpen = false;
+      this.isLocationDropdownOpen = false;
+    }
+  }
+
+  /** Toggle service-type dropdown; closes location dropdown first */
+  toggleServiceDropdown(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isLocationDropdownOpen = false;
+    this.isSelectOpen = !this.isSelectOpen;
+  }
+
+  /** Called when location input is focused */
+  onLocationFocus(): void {
+    this.isSelectOpen = false;
+    if (this.locations.length > 0) {
+      this.isLocationDropdownOpen = true;
+    }
   }
 
   private initLocationSearch(): void {
@@ -97,6 +123,7 @@ export class ServiceWiseJobPostings implements OnInit {
       })
     ).subscribe({
       next: (res) => {
+        this.isSelectOpen = false;
         this.locations = res.data || [];
         this.isLocationLoading = false;
         this.isLocationDropdownOpen = this.locations.length > 0;
@@ -290,7 +317,8 @@ export class ServiceWiseJobPostings implements OnInit {
         this.selectedServiceType.jobType,
         1,
         fetchSize,
-        this.selectedServiceType.RegionalJob
+        this.selectedServiceType.RegionalJob,
+        this.selectedLocation?.id ?? null
       )
       .subscribe({
         next: (res) => {
@@ -344,7 +372,8 @@ export class ServiceWiseJobPostings implements OnInit {
         this.selectedServiceType.jobType,
         1,
         fetchSize,
-        this.selectedServiceType.RegionalJob
+        this.selectedServiceType.RegionalJob,
+        this.selectedLocation?.id ?? null
       )
       .subscribe({
         next: (res) => {
@@ -485,6 +514,10 @@ export class ServiceWiseJobPostings implements OnInit {
     this.countAnimationFrame = requestAnimationFrame(step);
   }
 
+
+  openJobDetails(url: string): void {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
 
   onSubmit(): void {
     this.updateDateRangeError();
