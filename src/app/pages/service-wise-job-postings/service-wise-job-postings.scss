@@ -794,15 +794,15 @@
 }
 
 .col-sl {
-  width: 3.5%;
+  width: 2%;
 }
 
 .col-jp {
-  width: 8.5%;
+  width: 5%;
 }
 
 .col-title {
-  width: 14%;
+  width: 12%;
 }
 
 thead th.col-title {
@@ -814,11 +814,11 @@ tbody td.col-title {
 }
 
 .col-cp {
-  width: 8%;
+  width: 5%;
 }
 
 .col-company {
-  width: 16%;
+  width: 12.5%;
 }
 
 thead th.col-company {
@@ -829,44 +829,54 @@ tbody td.col-company {
   text-align: left !important;
 }
 
+.col-location {
+  width: 8%;
+}
+
+.location-text {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: .78rem;
+}
+
 .col-category {
   width: 10%;
 }
 
 .col-service {
-  width: 8%;
+  width: 6%;
 }
 
 .col-publish {
-  width: 10.5%;
+  width: 7%;
 }
 
 .col-deadline {
-  width: 10.5%;
+  width: 7%;
 }
 
 .col-summary {
-  width: 7%;
+  width: 6%;
 }
 
 .col-details {
-  width: 7%;
+  width: 6%;
 }
 
 .col-apply {
-  width: 7%;
+  width: 6%;
 }
 
 .sl-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   background: var(--primary-light);
   border: 1.5px solid rgba(3, 105, 161, .20);
   border-radius: 50%;
-  font-size: .72rem;
+  font-size: .65rem;
   font-weight: 700;
   color: var(--primary);
 }

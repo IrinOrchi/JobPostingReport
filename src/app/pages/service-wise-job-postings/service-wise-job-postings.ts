@@ -704,6 +704,7 @@ export class ServiceWiseJobPostings implements OnInit {
       'CP_ID': job.cP_ID,
       'Company Name': job.companyName,
       'Category Name': job.caT_NAME || '-',
+      'Location': job.l_NAME || '-',
       'Service Type': this.getServiceTypeName(job),
       'Publish Date': job.publishDate ? new Date(job.publishDate).toLocaleString() : '-',
       'Deadline': job.deadLine ? new Date(job.deadLine).toLocaleString() : '-',

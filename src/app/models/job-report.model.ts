@@ -24,6 +24,7 @@ export interface JobReportItem {
   deadLine?: string;
   jobSummary?: number;
   caT_NAME?: string;
+  l_NAME?: string;
   jobDetails?: number;
   jobDetailsLink?: string;
 }

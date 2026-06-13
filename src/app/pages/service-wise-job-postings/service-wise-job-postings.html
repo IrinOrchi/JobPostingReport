@@ -352,6 +352,7 @@
                 <th class="col-title">Job Title</th>
                 <th class="col-cp">CP_ID</th>
                 <th class="col-company">Company Name</th>
+                <th class="col-location">Location</th>
                 <th class="col-category">Category Name</th>
                 <th class="col-service">Service Type</th>
                 <th class="col-publish">Publish Date</th>
@@ -417,6 +418,9 @@
                 <td class="col-company">
                   <span class="company-name">{{ job.companyName }}</span>
                 </td>
+                <td class="col-location">
+                  <span class="location-text">{{ job.l_NAME || '-' }}</span>
+                </td>
                 <td class="col-category">
                   <span class="category-text">{{ job.caT_NAME || '-' }}</span>
                 </td>
@@ -445,7 +449,7 @@
               } @empty {
               <!-- Empty State -->
               <tr>
-                <td colspan="12" class="empty-state">
+                <td colspan="13" class="empty-state">
                   <div class="empty-content">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
