@@ -18,7 +18,7 @@
           <p class="page-subtitle">Service Wise Overview</p>
         </div>
       </div>
-      <a class="home-link" href="https://mis.bdjobs.com/mis/SupportCRM/checkUserStatus.asp?">
+      <a class="home-link" href="https://mis.bdjobs.com/mis/">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -247,6 +247,19 @@
           Total <strong class="count-animate">{{ displayCount | number }}</strong> {{ isLoading ? 'Jobs found' :
           (totalCount <= 1 ? 'Job found' : 'Jobs found' ) }} </div>
 
+
+            <button class="download-excel-btn" (click)="exportToExcel()"
+              [disabled]="isLoading || (isSearchMode ? filteredJobs.length === 0 : allJobs.length === 0)"
+              title="Download as Excel">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span>Download Excel</span>
+            </button>
+
             @if (totalPages > 1) {
             <div class="pagination">
               <button class="page-btn nav-btn" (click)="prevPage()" [disabled]="currentPage === 1" title="Previous">
@@ -388,7 +401,7 @@
                   <span class="sl-badge">{{ getSerialNumber(i) }}</span>
                 </td>
                 <td class="col-jp">
-                  <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.jP_ID }}</a>
+                  <span class="link-primary">{{ job.jP_ID }}</span>
                 </td>
                 <td class="col-title">
                   @if (job.jobDetailsLink) {
@@ -399,7 +412,7 @@
                   }
                 </td>
                 <td class="col-cp">
-                  <a href="#" class="link-primary" (click)="$event.preventDefault()">{{ job.cP_ID }}</a>
+                  <span class="link-primary">{{ job.cP_ID }}</span>
                 </td>
                 <td class="col-company">
                   <span class="company-name">{{ job.companyName }}</span>

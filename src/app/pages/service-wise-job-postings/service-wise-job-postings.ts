@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { ServiceJobPostingsService, LocationItem } from '../../services/serviceJobPostings.service';
 import { JobReportItem, ServiceTypeDropdownOption } from '../../models/job-report.model';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, EMPTY } from 'rxjs';
+import * as XLSX from 'xlsx';
+
 
 
 
@@ -688,4 +690,50 @@ export class ServiceWiseJobPostings implements OnInit {
       );
     });
   }
+
+  exportToExcel(): void {
+    const dataToExport = this.isSearchMode ? this.filteredJobs : this.allJobs;
+    if (!dataToExport || dataToExport.length === 0) {
+      return;
+    }
+
+    const excelData = dataToExport.map((job, index) => ({
+      'Sl.': index + 1,
+      'JP_ID': job.jP_ID,
+      'Job Title': job.jobTitle,
+      'CP_ID': job.cP_ID,
+      'Company Name': job.companyName,
+      'Category Name': job.caT_NAME || '-',
+      'Service Type': this.getServiceTypeName(job),
+      'Publish Date': job.publishDate ? new Date(job.publishDate).toLocaleString() : '-',
+      'Deadline': job.deadLine ? new Date(job.deadLine).toLocaleString() : '-',
+      'Job Summary': job.summaryView || 0,
+      'Job Details': job.detailView || 0,
+      'Total Apply': job.totalApply
+    }));
+
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+    const workbook: XLSX.WorkBook = { Sheets: { 'Job Report': worksheet }, SheetNames: ['Job Report'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    this.saveAsExcelFile(excelBuffer, 'Job_Posting_Report');
+  }
+
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const EXCEL_EXTENSION = '.xlsx';
+    const data: Blob = new Blob([buffer], {
+      type: EXCEL_TYPE
+    });
+    const url = window.URL.createObjectURL(data);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION;
+    link.click();
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+      link.remove();
+    }, 100);
+  }
 }
+

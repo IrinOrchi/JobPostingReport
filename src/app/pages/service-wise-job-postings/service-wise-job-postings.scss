@@ -516,6 +516,50 @@
   }
 }
 
+.download-excel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: white;
+  color: #1e293b;
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+
+  svg {
+    color: var(--success);
+    transition: transform 0.2s ease;
+  }
+
+  &:hover:not(:disabled) {
+    background: #f8fafc;
+    border-color: var(--success);
+    color: var(--success);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+
+    svg {
+      transform: translateY(2px);
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--surface-alt);
+  }
+}
+
 .total-badge strong.badge-loading {
   animation: badgePulse 1s ease-in-out infinite;
   letter-spacing: 2px;
@@ -834,13 +878,12 @@ tbody td.col-company {
   transition: color .2s ease;
 }
 
-.link-primary:hover {
+a.link-primary:hover {
   color: var(--primary-dark);
-  text-decoration: none;
 }
 
-.job-title-link:hover {
-  text-decoration: underline;
+a.job-title-link:hover {
+  text-decoration: underline !important;
 }
 
 .job-title-text {
