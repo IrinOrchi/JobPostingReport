@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ServiceJobPostingsService, LocationItem } from '../../services/serviceJobPostings.service';
 import { JobReportItem, ServiceTypeDropdownOption } from '../../models/job-report.model';
 import { Subject, debounceTime, distinctUntilChanged, switchMap, EMPTY } from 'rxjs';
@@ -76,15 +77,28 @@ export class ServiceWiseJobPostings implements OnInit {
   isLocationDropdownOpen: boolean = false;
   isLocationLoading: boolean = false;
   private locationSearchSubject = new Subject<string>();
+  homeUrl: string = 'https://mis.bdjobs.com/mis/';
 
   constructor(
     private jobService: ServiceJobPostingsService,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.initDates();
     this.initLocationSearch();
+
+    this.route.queryParams.subscribe(params => {
+      const user = params['user'] || '';
+      const id = params['id'] || params['Id'] || '';
+
+      if (user && id) {
+        this.homeUrl = `https://mis.bdjobs.com/mis/SupportCRM/checkUserStatus.asp?user=${user}&Id=${id}`;
+      } else {
+        this.homeUrl = 'https://mis.bdjobs.com/mis/';
+      }
+    });
   }
 
   @HostListener('document:click', ['$event'])
@@ -265,17 +279,23 @@ export class ServiceWiseJobPostings implements OnInit {
     const regionalJob =
       job.regionalJob ?? job.RegionalJob ?? row['regionalJob'] ?? row['RegionalJob'];
 
+    const sType = serviceType !== undefined && serviceType !== null ? Number(serviceType) : null;
+    const rJob = regionalJob !== undefined && regionalJob !== null ? Number(regionalJob) : null;
+
+    if (sType === 14 && rJob === 0) {
+      return 'Blue Collar';
+    }
+    if (sType === 12 && rJob === 0) {
+      return 'Free Job';
+    }
+
     if (
-      serviceType !== undefined &&
-      serviceType !== null &&
+      sType !== null &&
       jType !== undefined &&
       jType !== null &&
-      regionalJob !== undefined &&
-      regionalJob !== null
+      rJob !== null
     ) {
-      const sType = Number(serviceType);
       const jTypeStr = String(jType);
-      const rJob = Number(regionalJob);
       if (sType === 0 && jTypeStr === 'J' && rJob === 5) return 'PNPL';
       if (sType === 0 && jTypeStr === 'J' && rJob === 0) return 'Standard Listing';
       if (sType === 1 && jTypeStr === 'H' && rJob === 0) return 'Hot Job';

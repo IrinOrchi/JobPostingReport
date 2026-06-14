@@ -18,7 +18,7 @@
           <p class="page-subtitle">Service Wise Overview</p>
         </div>
       </div>
-      <a class="home-link" href="https://mis.bdjobs.com/mis/">
+      <a class="home-link" [href]="homeUrl">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
@@ -402,7 +402,7 @@
                   <span class="sl-badge">{{ getSerialNumber(i) }}</span>
                 </td>
                 <td class="col-jp">
-                  <span class="link-primary">{{ job.jP_ID }}</span>
+                  <span>{{ job.jP_ID }}</span>
                 </td>
                 <td class="col-title">
                   @if (job.jobDetailsLink) {
@@ -413,7 +413,7 @@
                   }
                 </td>
                 <td class="col-cp">
-                  <span class="link-primary">{{ job.cP_ID }}</span>
+                  <span>{{ job.cP_ID }}</span>
                 </td>
                 <td class="col-company">
                   <span class="company-name">{{ job.companyName }}</span>
