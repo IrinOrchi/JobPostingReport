@@ -155,6 +155,10 @@
   padding: 24px;
 }
 
+.search-panel .panel-body {
+  overflow: visible;
+}
+
 .search-form {
   display: flex;
   align-items: flex-end;
@@ -162,14 +166,30 @@
   flex-wrap: wrap;
 }
 
+.search-form--nowrap {
+  flex-wrap: nowrap;
+  gap: 28px;
+  overflow: visible;
+
+  .form-group {
+    flex: 1 1 0;
+    min-width: 160px;
+    max-width: 260px;
+  }
+
+  .form-group.form-group--action {
+    flex: 0 0 auto;
+    min-width: unset;
+    max-width: unset;
+  }
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 7px;
   flex: 1 1 220px;
-  /* Uniform width with a basis */
   max-width: 300px;
-  /* Prevent it from getting too wide */
 }
 
 .form-group.form-group--action {
@@ -857,6 +877,56 @@ tbody td.col-company {
 
 .col-deadline {
   width: 7%;
+}
+
+// Live/Expired dot indicator shown inside Job Title cell
+.title-cell {
+  display: flex;
+  align-items: flex-start; // dot aligns with the first text line, not the middle
+  gap: 5px;
+}
+
+.live-dot {
+  flex-shrink: 0;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  position: relative;
+  margin-top: 3px; 
+}
+
+.dot-live {
+  background: #4ac276;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, .25);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: rgba(74, 222, 128, .18);
+    animation: dotPulse 2s ease-in-out infinite;
+  }
+}
+
+.dot-expired {
+  background: #f87171;
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, .22);
+}
+
+@keyframes dotPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: .6;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: .15;
+  }
 }
 
 .col-summary {

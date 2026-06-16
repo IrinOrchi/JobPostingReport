@@ -35,6 +35,10 @@ export class ServiceWiseJobPostings implements OnInit {
 
   selectedServiceType: ServiceTypeDropdownOption = this.serviceTypes[0];
 
+  // Job Status filter ('all' | 'live')
+  selectedJobStatus: 'all' | 'live' = 'all';
+  isJobStatusOpen: boolean = false;
+
   todayStr: string = '';
   yesterdayStr: string = '';
   /** Earliest selectable publish date */
@@ -106,14 +110,27 @@ export class ServiceWiseJobPostings implements OnInit {
     if (!this.elRef.nativeElement.contains(event.target)) {
       this.isSelectOpen = false;
       this.isLocationDropdownOpen = false;
+      this.isJobStatusOpen = false;
     }
   }
 
-  /** Toggle service-type dropdown; closes location dropdown first */
   toggleServiceDropdown(event: MouseEvent): void {
     event.stopPropagation();
     this.isLocationDropdownOpen = false;
+    this.isJobStatusOpen = false;
     this.isSelectOpen = !this.isSelectOpen;
+  }
+
+  toggleJobStatusDropdown(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isSelectOpen = false;
+    this.isLocationDropdownOpen = false;
+    this.isJobStatusOpen = !this.isJobStatusOpen;
+  }
+
+  selectJobStatus(status: 'all' | 'live'): void {
+    this.selectedJobStatus = status;
+    this.isJobStatusOpen = false;
   }
 
   /** Called when location input is focused */
@@ -340,7 +357,8 @@ export class ServiceWiseJobPostings implements OnInit {
         1,
         fetchSize,
         this.selectedServiceType.RegionalJob,
-        this.selectedLocation?.id ?? null
+        this.selectedLocation?.id ?? null,
+        this.selectedJobStatus === 'live' ? true : undefined
       )
       .subscribe({
         next: (res) => {
@@ -395,7 +413,8 @@ export class ServiceWiseJobPostings implements OnInit {
         1,
         fetchSize,
         this.selectedServiceType.RegionalJob,
-        this.selectedLocation?.id ?? null
+        this.selectedLocation?.id ?? null,
+        this.selectedJobStatus === 'live' ? true : undefined
       )
       .subscribe({
         next: (res) => {
@@ -559,6 +578,12 @@ export class ServiceWiseJobPostings implements OnInit {
     this.filteredJobs = [];
     this.fetchJobs();
   }
+
+  getLiveStatusLabel(liveOrNot: number | undefined): string {
+    if (liveOrNot === undefined || liveOrNot === null) return '';
+    return liveOrNot === 0 ? 'Expired' : 'Live';
+  }
+
 
   onPageSizeChange(): void {
     this.currentPage = 1;
@@ -728,6 +753,7 @@ export class ServiceWiseJobPostings implements OnInit {
       'Service Type': this.getServiceTypeName(job),
       'Publish Date': job.publishDate ? new Date(job.publishDate).toLocaleString() : '-',
       'Deadline': job.deadLine ? new Date(job.deadLine).toLocaleString() : '-',
+      'Status': this.getLiveStatusLabel(job.liveOrNot) || '-',
       'Job Summary': job.summaryView || 0,
       'Job Details': job.detailView || 0,
       'Total Apply': job.totalApply

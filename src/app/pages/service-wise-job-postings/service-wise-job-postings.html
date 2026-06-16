@@ -42,7 +42,7 @@
       <span>Search Panel</span>
     </div>
     <div class="panel-body">
-      <div class="search-form">
+      <div class="search-form search-form--nowrap">
         <div class="form-group">
           <label class="form-label">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -149,6 +149,34 @@
                 {{ loc.name }}
               </div>
               }
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            Job Status
+          </label>
+          <div class="input-wrapper select-wrapper">
+            <div class="custom-select-trigger" [class.open]="isJobStatusOpen" (click)="toggleJobStatusDropdown($event)">
+              <span>{{ selectedJobStatus === 'live' ? 'Live' : 'All' }}</span>
+              <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </div>
+            @if (isJobStatusOpen) {
+            <div class="custom-dropdown-menu">
+              <div class="custom-dropdown-item" [class.active]="selectedJobStatus === 'all'"
+                (click)="selectJobStatus('all')">All</div>
+              <div class="custom-dropdown-item" [class.active]="selectedJobStatus === 'live'"
+                (click)="selectJobStatus('live')">Live</div>
             </div>
             }
           </div>
@@ -405,12 +433,19 @@
                   <span>{{ job.jP_ID }}</span>
                 </td>
                 <td class="col-title">
-                  @if (job.jobDetailsLink) {
-                  <a href="javascript:void(0)" (click)="openJobDetails(job.jobDetailsLink)"
-                    class="link-primary job-title-link">{{ job.jobTitle }}</a>
-                  } @else {
-                  <span class="job-title-text">{{ job.jobTitle }}</span>
-                  }
+                  <span class="title-cell">
+                    @if (job.liveOrNot !== undefined && job.liveOrNot !== null) {
+                    <span class="live-dot" [class.dot-live]="job.liveOrNot !== 0"
+                      [class.dot-expired]="job.liveOrNot === 0"
+                      [title]="job.liveOrNot === 0 ? 'Expired' : 'Live'"></span>
+                    }
+                    @if (job.jobDetailsLink) {
+                    <a href="javascript:void(0)" (click)="openJobDetails(job.jobDetailsLink)"
+                      class="link-primary job-title-link">{{ job.jobTitle }}</a>
+                    } @else {
+                    <span class="job-title-text">{{ job.jobTitle }}</span>
+                    }
+                  </span>
                 </td>
                 <td class="col-cp">
                   <span>{{ job.cP_ID }}</span>

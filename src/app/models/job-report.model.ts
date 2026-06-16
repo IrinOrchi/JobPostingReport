@@ -27,6 +27,7 @@ export interface JobReportItem {
   l_NAME?: string;
   jobDetails?: number;
   jobDetailsLink?: string;
+  liveOrNot?: number;
 }
 
 export interface JobReportResponse {
